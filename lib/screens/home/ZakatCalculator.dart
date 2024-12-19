@@ -36,6 +36,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
           'Add Asset Zaket',
           style: TextStyle(color: inputColor),
@@ -465,7 +466,6 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
               }
 
               final date = selectedDateNotifier.value;
-
               final category = assetType;
               final type = operation;
               final double amount = assetType == "GOLD"

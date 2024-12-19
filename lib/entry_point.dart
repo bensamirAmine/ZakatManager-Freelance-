@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:foodly_ui/screens/home/ZakatCalculator.dart';
+ 
 import 'constants.dart';
 import 'screens/home/home_screen.dart';
-import 'screens/orderDetails/order_details_screen.dart';
-import 'screens/profile/profile_screen.dart';
-import 'screens/search/search_screen.dart';
-
+ import 'screens/profile/profile_screen.dart';
+ 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
 
@@ -22,16 +21,16 @@ class _EntryPointState extends State<EntryPoint> {
   // List of nav items
   final List<Map<String, dynamic>> _navitems = [
     {"icon": "assets/icons/home.svg", "title": "Home"},
-    {"icon": "assets/icons/search.svg", "title": "Search"},
-    {"icon": "assets/icons/order.svg", "title": "Orders"},
+    // {"icon": "assets/icons/search.svg", "title": "Search"},
+    {"icon": "assets/icons/order.svg", "title": "Zakat"},
     {"icon": "assets/icons/profile.svg", "title": "Profile"},
   ];
 
 // Screens
   final List<Widget> _screens = [
     const HomeScreen(),
-    const SearchScreen(),
-    const OrderDetailsScreen(),
+    // const SearchScreen(),
+    AddAssetZaketPage(),
     const ProfileScreen(),
   ];
 

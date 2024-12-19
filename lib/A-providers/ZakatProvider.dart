@@ -41,9 +41,9 @@ class ZakatProvider with ChangeNotifier {
 
       notifyListeners();
 
-      developer.log('Total: $_zakatAmount', name: '_total');
-      developer.log('History: ${_history.length} transactions',
-          name: '_history');
+      // developer.log('Total: $_zakatAmount', name: '_total');
+      // developer.log('History: ${_history.length} transactions',
+      //     name: '_history');
     } catch (e) {
       _errorMessage = e.toString();
       notifyListeners();
@@ -62,6 +62,7 @@ class ZakatProvider with ChangeNotifier {
       final response = await zakatService.AddTransaction(
           type, category, amount, acquisitionDate);
       _message = response['message'];
+      
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.loadUser(context);
 

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
+import 'package:foodly_ui/screens/auth/sign_in_screen.dart';
 import 'package:foodly_ui/screens/home/TransactionHistory.dart';
 import 'package:foodly_ui/screens/home/ZakatCarousel.dart';
 import 'package:foodly_ui/screens/home/ZakatcalculatorPage.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 
@@ -47,23 +49,26 @@ class _HomeScreenState extends State<HomeScreen> {
     final userprovider = Provider.of<UserProvider>(context);
     final _user = userprovider.user;
     final total = _user?.zakatAmount ?? 0.0;
+    final golweight = _user?.goldWeight ?? 0.0;
+    final NissabAcquisitionDate = _user?.NissabAcquisitionDate ?? null;
     final _percent_cash = (_user?.balance != null &&
             _user?.zakatAmount != null &&
             _user!.zakatAmount > 0)
         ? ((_user.balance / _user.zakatAmount) * 100)
         : null;
 
-    final double? _percent_gold =
-        ((_user!.goldWeight * _user.goldPricePerGram) / _user.zakatAmount) *
-            100;
-    DateTime? nissabDate = _user.NissabAcquisitionDate; // Date d'acquisition
-    DateTime zakatDueDate = nissabDate!.add(Duration(days: 365)); // +1 an
+    final double? _percent_gold = ((golweight * 209) / total) * 100;
+    DateTime? nissabDate = _user?.NissabAcquisitionDate; // Date d'acquisition
+    if (nissabDate == null) {
+      return Center(child: Text('Nissab acquisition date is not available.'));
+    }
 
-    // Obtenir la date actuelle
-    DateTime currentDate = DateTime.now();
+    DateTime zakatDueDate = nissabDate.add(Duration(days: 365)); // +1 an
 
-    // Vérifier si la date actuelle est avant ou après la date limite
-    bool isZakatDue = currentDate.isAfter(zakatDueDate);
+    //  DateTime currentDate = DateTime.now();
+
+    // // Vérifier si la date actuelle est avant ou après la date limite
+    // bool isZakatDue = currentDate.isAfter(zakatDueDate);
     return Scaffold(
       appBar: AppBar(
         leading: Builder(
@@ -216,8 +221,17 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Logout'),
               onTap: () {
-                Navigator.pop(context);
-                // Implement logout functionality
+                final SharedPreferences prefs =
+                    SharedPreferences.getInstance() as SharedPreferences;
+
+                prefs.remove('auth_token');
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignInScreen(),
+                  ),
+                );
               },
             ),
           ],
