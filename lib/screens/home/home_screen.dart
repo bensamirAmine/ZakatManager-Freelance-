@@ -26,8 +26,15 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final _userProvider = Provider.of<UserProvider>(context, listen: false);
+      final _zakatProvider = Provider.of<ZakatProvider>(context, listen: false);
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _userProvider.loadUser(
+          context,
+        );
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _zakatProvider.recalculateTotals(
           context,
         );
       });
@@ -47,35 +54,19 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final userprovider = Provider.of<UserProvider>(context);
+
     final _user = userprovider.user;
     final total = _user?.zakatAmount ?? 0.0;
-    double balancePercentage =
-        total > 0 ? (_user?.balance ?? 0.0) / total : 0.0;
-    double goldPercentage = total > 0
-        ? ((_user?.goldWeight ?? 0.0) * (_user?.goldPricePerGram ?? 0.0)) /
-            total
-        : 0.0;
 
-    // final _percent_cash = (_user?.balance != null &&
-    //         _user?.zakatAmount != null &&
-    //         _user!.zakatAmount > 0)
-    //     ? ((_user.balance! / _user.zakatAmount) * 100)
-    //     : null;
-    // double _cashpercent =
-    //     ((_user?.balance ?? 0.0) / (_user?.zakatAmount ?? 1.0));
-    // double _totalGoldValue =
-    //     (_user?.goldWeight ?? 0.0) * (_user?.goldPricePerGram ?? 0.0);
-
-    // final _goldpercent = ((_totalGoldValue) / (_user?.zakatAmount ?? 1.0));
-    double _cashpercent =
-        ((_user?.balance ?? 0.0) / (_user?.zakatAmount ?? 0.0))
-            .clamp(0.0, 100.0);
-    double _totalGoldValue =
-        (_user?.goldWeight ?? 0.0) * (_user?.goldPricePerGram ?? 0.0);
-
-    // final double? _percent_gold = ((golweight * 209) / total) * 100;
-    DateTime? nissabDate = _user?.NissabAcquisitionDate; // Date d'acquisition
-    DateTime zakatDueDate = nissabDate!.add(Duration(days: 365));
+    DateTime? nissabDate = _user?.NissabAcquisitionDate; // Vérifiez sa nullité
+    DateTime? zakatDueDate;
+    if (nissabDate != null) {
+      zakatDueDate = nissabDate.add(Duration(days: 365));
+    } else {
+      // Gérez le cas où la date d'acquisition est absente
+      zakatDueDate =
+          DateTime.now().add(Duration(days: 365)); // Exemple par défaut
+    }
 
     //  DateTime currentDate = DateTime.now();
 
@@ -420,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   FontAwesomeIcons.box),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          // const SizedBox(height: 20),
                           UserAssetDisplay(user: _user),
                         ],
                       ),
@@ -431,18 +422,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 170, // Ajustez la hauteur si nécessaire
                     child: ZakatCalculator(),
                   ),
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      height: 450, // Ajustez la hauteur si nécessaire
+                      child: TransactionHistory(),
+                    ),
+                  ),
                   ZakatCarousel(),
                   Divider(
                     color: titleColor,
                     thickness: 0.3,
                     indent: 20,
                     endIndent: 20,
-                  ),
-                  SingleChildScrollView(
-                    child: SizedBox(
-                      height: 450, // Ajustez la hauteur si nécessaire
-                      child: TransactionHistory(),
-                    ),
                   ),
                 ],
               ),
@@ -516,8 +507,9 @@ class UserRowWidget extends StatelessWidget {
             ),
           ),
           Text(
-            "Nissab : 13,000 DT",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            "Nissab : 19,000 DT",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: titleColor, fontSize: 15),
           ),
           const SizedBox(
             width: 5,

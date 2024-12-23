@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/constants.dart';
 import 'package:provider/provider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
 
@@ -9,12 +8,11 @@ class TransactionHistory extends StatefulWidget {
 }
 
 class _TransactionHistoryState extends State<TransactionHistory> {
-  int _selectedSegment = 0; // 0 for Cash, 1 for Gold
+  int _selectedSegment = 0;
 
   @override
   void initState() {
     super.initState();
-    // Charger les totaux et l'historique au démarrage
     final zakatProvider = Provider.of<ZakatProvider>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       zakatProvider.recalculateTotals(context);
@@ -27,23 +25,6 @@ class _TransactionHistoryState extends State<TransactionHistory> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: double.infinity,
-              color: primaryColor,
-              height: 50,
-              child: Center(
-                child: Text(
-                  'Transaction History',
-                  style: TextStyle(
-                      color: inputColor,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 20),
-                ),
-              ),
-            ),
-          ),
-          Padding(
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -54,16 +35,12 @@ class _TransactionHistoryState extends State<TransactionHistory> {
               ],
             ),
           ),
-
-          // Transactions List with Consumer
           Expanded(
             child: Consumer<ZakatProvider>(
               builder: (context, zakatProvider, child) {
                 if (zakatProvider.isLoading) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.teal),
-                    ),
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
                 }
 
@@ -71,12 +48,12 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                   return Center(
                     child: Text(
                       zakatProvider.errorMessage!,
-                      style: TextStyle(color: Colors.red, fontSize: 16),
+                      style: const TextStyle(color: Colors.red, fontSize: 16),
                     ),
                   );
                 }
 
-                // Filter transactions based on the selected segment
+                // Filtrer les transactions en fonction de _selectedSegment
                 final transactions = _selectedSegment == 0
                     ? zakatProvider.history
                         .where((tx) => tx.category == "CASH")
@@ -85,46 +62,71 @@ class _TransactionHistoryState extends State<TransactionHistory> {
                         .where((tx) => tx.category == "GOLD")
                         .toList();
 
+                if (transactions.isEmpty) {
+                  return const Center(
+                    child: Text("No transactions available."),
+                  );
+                }
+
                 return ListView.builder(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   itemCount: transactions.length,
                   itemBuilder: (context, index) {
                     final transaction = transactions[index];
-                    return Card(
-                      color: transaction.type == "ADD"
-                          ? Colors.green.shade50
-                          : Colors.red.shade50,
-                      elevation: 5,
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+
+                    // Utilisation de Dismissible
+                    return Dismissible(
+                      key: Key(transaction.id),
+                      direction: DismissDirection.endToStart,
+                      background: Container(
+                        color: Colors.red,
+                        alignment: Alignment.centerRight,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: const Icon(
+                          Icons.delete,
+                          color: Colors.white,
+                        ),
                       ),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: transaction.type == "ADD"
-                              ? Colors.green.shade200
-                              : Colors.red.shade200,
-                          child: Icon(
-                            transaction.type == "ADD"
-                                ? Icons.arrow_upward
-                                : Icons.arrow_downward,
-                            color: transaction.type == "ADD"
-                                ? Colors.green
-                                : Colors.red,
-                          ),
+                      onDismissed: (direction) async {
+                        // Appeler la méthode deleteTransaction
+                        await _deleteTransaction(context, transaction.id);
+                      },
+                      child: Card(
+                        color: transaction.type == "ADD"
+                            ? Colors.green.shade50
+                            : Colors.red.shade50,
+                        elevation: 2,
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                        title: Text(
-                          "${transaction.type} - ${transaction.amount} ${_selectedSegment == 0 ? "DT" : "g"}",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: transaction.type == "ADD"
+                                ? Colors.green.shade200
+                                : Colors.red.shade200,
+                            child: Icon(
+                              transaction.type == "ADD"
+                                  ? Icons.arrow_upward
+                                  : Icons.arrow_downward,
+                              color: transaction.type == "ADD"
+                                  ? Colors.green
+                                  : Colors.red,
+                            ),
                           ),
-                        ),
-                        subtitle: Text(
-                          "Date: ${transaction.acquisitionDate}",
-                          style: TextStyle(
-                            color: Colors.grey.shade600,
-                            fontSize: 13,
+                          title: Text(
+                            "${transaction.type} - ${transaction.amount} ${_selectedSegment == 0 ? "DT" : "g"}",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "Date: ${transaction.acquisitionDate}",
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
                       ),
@@ -139,7 +141,23 @@ class _TransactionHistoryState extends State<TransactionHistory> {
     );
   }
 
-  // Button for switching segments
+  // Méthode pour supprimer une transaction
+  Future<void> _deleteTransaction(
+      BuildContext context, String transactionId) async {
+    final zakatProvider = Provider.of<ZakatProvider>(context, listen: false);
+    try {
+      await zakatProvider.deleteTransaction(context, transactionId);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Transaction deleted successfully.")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Failed to delete transaction: $e")),
+      );
+    }
+  }
+
+  // Bouton pour changer de segment
   Widget _buildSegmentButton(String text, int index) {
     return GestureDetector(
       onTap: () {
@@ -153,7 +171,7 @@ class _TransactionHistoryState extends State<TransactionHistory> {
         decoration: BoxDecoration(
           color:
               _selectedSegment == index ? Colors.teal.shade700 : Colors.white,
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.teal.shade700, width: 2),
         ),
         child: Text(

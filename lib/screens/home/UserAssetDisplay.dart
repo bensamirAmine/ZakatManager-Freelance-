@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart'; // Pour le graphique circulaire
 import 'package:foodly_ui/A-models/UserModel.dart';
+import 'package:foodly_ui/constants.dart';
 
 class UserAssetDisplay extends StatelessWidget {
   final User user;
@@ -20,7 +22,9 @@ class UserAssetDisplay extends StatelessWidget {
         : 0.0;
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Barres de progression pour Balance et Gold
         _progressBar(
           "Balance",
           balancePercentage,
@@ -32,6 +36,35 @@ class UserAssetDisplay extends StatelessWidget {
           goldPercentage,
           Colors.amber,
         ),
+        const SizedBox(height: 20),
+
+        // Affichage supplémentaire si l'utilisateur doit payer la zakat
+        if (user.zakatCalculated == true) ...[
+          // const Text(
+          //   "Metrics",
+          //   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          // ),
+          // const SizedBox(height: 10),
+          // Text(
+          //   "Date de la zakat : ${user.NissabAcquisitionDate}",
+          //   style: TextStyle(fontSize: 14, color: Colors.grey[700]),
+          // ),
+          // const SizedBox(height: 20),
+          Center(
+            child: SizedBox(
+              height: 200,
+              child: _pieChart(user),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _legendItem("Cash", primaryColor),
+              _legendItem("Gold", Colors.amber),
+              _legendItem("Silver", Colors.grey),
+            ],
+          )
+        ],
       ],
     );
   }
@@ -41,6 +74,7 @@ class UserAssetDisplay extends StatelessWidget {
         (progress != null && progress >= 0.0 && progress <= 1.0)
             ? progress
             : 0.0;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -49,7 +83,7 @@ class UserAssetDisplay extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: Colors.black,
               ),
@@ -88,4 +122,55 @@ class UserAssetDisplay extends StatelessWidget {
       ],
     );
   }
+
+  Widget _pieChart(User user) {
+    double totalValue = (user.balance ?? 0.0) +
+        ((user.goldWeight ?? 0.0) * (user.goldPricePerGram ?? 0.0));
+    double goldPercentage = totalValue > 0
+        ? ((user.goldWeight ?? 0.0) * (user.goldPricePerGram ?? 0.0))
+        : 0.0;
+    double balancePercentage =
+        totalValue > 0 ? totalValue - goldPercentage : 0.0;
+
+    return PieChart(
+      PieChartData(
+        sections: [
+          PieChartSectionData(
+            value: balancePercentage,
+            color: Colors.blue,
+            title: "",
+            titleStyle: const TextStyle(fontSize: 0, color: Colors.white),
+          ),
+          PieChartSectionData(
+            value: goldPercentage,
+            color: Colors.amber,
+            title: "",
+            titleStyle: const TextStyle(fontSize: 0, color: Colors.white),
+          ),
+        ],
+        sectionsSpace: 2,
+        centerSpaceRadius: 40,
+      ),
+    );
+  }
+}
+
+Widget _legendItem(String title, Color color) {
+  return Row(
+    children: [
+      Container(
+        width: 12,
+        height: 12,
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ),
+      ),
+      const SizedBox(width: 5),
+      Text(
+        title,
+        style: const TextStyle(fontSize: 14, color: Colors.black87),
+      ),
+    ],
+  );
 }

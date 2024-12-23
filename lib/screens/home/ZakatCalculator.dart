@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/screens/home/DateSpinnerExample.dart';
@@ -31,6 +32,18 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
     "GOLD"
         "SILVER"
   ];
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final _userProvider = Provider.of<UserProvider>(context, listen: false);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _userProvider.loadUser(
+          context,
+        );
+      });
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

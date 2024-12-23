@@ -1,10 +1,5 @@
 // ignore: file_names
 class ApiEndpoints {
-  // ignore: constant_identifier_names
-  // static const ip_adress = '192.168.1.126';
-  // ignore: constant_identifier_names
-  // static const ip_adress = '192.168.1.68';
-
   static const ip_adress = '192.168.1.126';
   // static const ip_adress = '192.168.1.36';
 
@@ -15,6 +10,8 @@ class ApiEndpoints {
   static const profile = 'http://$ip_adress:1919/user/profile';
   static const getHistorique =
       'http://$ip_adress:1919/zakat/individual/getHistorique';
+  static const delete_transaction =
+      'http://$ip_adress:1919/zakat/delete_transaction';
   static const setTransaction =
       'http://$ip_adress:1919/zakat/individual/setTransaction';
 

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:foodly_ui/A-models/PanierItem.dart';
 import 'package:foodly_ui/A-models/Transaction.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
@@ -37,7 +36,7 @@ class ZakatService {
       } else {
         final responseBody = jsonDecode(response.body);
         return {
-          'message': responseBody['message'] ?? 'Error adding item to panier'
+          'message': responseBody['message'] ?? 'Error adding transaction'
         };
       }
     } catch (error) {
@@ -56,6 +55,24 @@ class ZakatService {
       return UserTotals.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to recalculate totals');
+    }
+  }
+
+  Future<String> deleteTransaction(String transactionID) async {
+    final url = Uri.parse(ApiEndpoints.delete_transaction);
+    final response = await http.post(
+      url,
+      headers: _buildHeaders(authProvider.token),
+      body: jsonEncode({
+        'transactionID': transactionID,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return jsonData['message'];
+    } else {
+      throw Exception("Failed to fetch orders. Server error.");
     }
   }
 

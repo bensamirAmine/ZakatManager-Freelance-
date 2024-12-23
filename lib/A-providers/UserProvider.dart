@@ -48,7 +48,6 @@ class UserProvider with ChangeNotifier {
       final _userService = UserService(authProvider: authProvider);
       final userData = await _userService.getUser();
       _user = User.fromJson(userData);
-      developer.log('Total: $_user', name: '_user');
 
       notifyListeners();
     } catch (error) {
