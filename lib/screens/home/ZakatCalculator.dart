@@ -63,7 +63,8 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       height: 90,
                       child: Card(
                         color: selectedCard == 0 ? secondBColor : neutralGray,
-                        elevation: 10,
+                        elevation: 5,
+                        shadowColor: Colors.black38,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(

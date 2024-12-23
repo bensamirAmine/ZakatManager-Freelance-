@@ -3,10 +3,10 @@ import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
 import 'package:foodly_ui/screens/auth/sign_in_screen.dart';
 import 'package:foodly_ui/screens/home/TransactionHistory.dart';
+import 'package:foodly_ui/screens/home/UserAssetDisplay.dart';
 import 'package:foodly_ui/screens/home/ZakatCarousel.dart';
 import 'package:foodly_ui/screens/home/ZakatcalculatorPage.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 
@@ -49,21 +49,33 @@ class _HomeScreenState extends State<HomeScreen> {
     final userprovider = Provider.of<UserProvider>(context);
     final _user = userprovider.user;
     final total = _user?.zakatAmount ?? 0.0;
-    final golweight = _user?.goldWeight ?? 0.0;
-    final NissabAcquisitionDate = _user?.NissabAcquisitionDate ?? null;
-    final _percent_cash = (_user?.balance != null &&
-            _user?.zakatAmount != null &&
-            _user!.zakatAmount > 0)
-        ? ((_user.balance / _user.zakatAmount) * 100)
-        : null;
+    double balancePercentage =
+        total > 0 ? (_user?.balance ?? 0.0) / total : 0.0;
+    double goldPercentage = total > 0
+        ? ((_user?.goldWeight ?? 0.0) * (_user?.goldPricePerGram ?? 0.0)) /
+            total
+        : 0.0;
 
-    final double? _percent_gold = ((golweight * 209) / total) * 100;
+    // final _percent_cash = (_user?.balance != null &&
+    //         _user?.zakatAmount != null &&
+    //         _user!.zakatAmount > 0)
+    //     ? ((_user.balance! / _user.zakatAmount) * 100)
+    //     : null;
+    // double _cashpercent =
+    //     ((_user?.balance ?? 0.0) / (_user?.zakatAmount ?? 1.0));
+    // double _totalGoldValue =
+    //     (_user?.goldWeight ?? 0.0) * (_user?.goldPricePerGram ?? 0.0);
+
+    // final _goldpercent = ((_totalGoldValue) / (_user?.zakatAmount ?? 1.0));
+    double _cashpercent =
+        ((_user?.balance ?? 0.0) / (_user?.zakatAmount ?? 0.0))
+            .clamp(0.0, 100.0);
+    double _totalGoldValue =
+        (_user?.goldWeight ?? 0.0) * (_user?.goldPricePerGram ?? 0.0);
+
+    // final double? _percent_gold = ((golweight * 209) / total) * 100;
     DateTime? nissabDate = _user?.NissabAcquisitionDate; // Date d'acquisition
-    if (nissabDate == null) {
-      return Center(child: Text('Nissab acquisition date is not available.'));
-    }
-
-    DateTime zakatDueDate = nissabDate.add(Duration(days: 365)); // +1 an
+    DateTime zakatDueDate = nissabDate!.add(Duration(days: 365));
 
     //  DateTime currentDate = DateTime.now();
 
@@ -221,10 +233,10 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Logout'),
               onTap: () {
-                final SharedPreferences prefs =
-                    SharedPreferences.getInstance() as SharedPreferences;
+                // final SharedPreferences prefs =
+                //     SharedPreferences.getInstance() as SharedPreferences;
 
-                prefs.remove('auth_token');
+                // prefs.remove('auth_token');
 
                 Navigator.push(
                   context,
@@ -302,7 +314,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Center(
                                 child: Text(
-                                  "Total To Pay  =  ${_user.zakatAmount / 40}.DT",
+                                  "Total To Pay  =  ${total / 40}.DT",
                                   style: TextStyle(
                                     color: Colors.green,
                                     fontWeight: FontWeight.bold,
@@ -409,13 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                           const SizedBox(height: 20),
-                          // Barres de progression
-                          if (_percent_cash != null)
-                            _progressBar("Cash", _percent_cash, Colors.green),
-                          if (_percent_gold != null)
-                            _progressBar("Gold", _percent_gold, Colors.orange),
-
-                          // const SizedBox(height: 10),
+                          UserAssetDisplay(user: _user),
                         ],
                       ),
                     ),
@@ -432,9 +438,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     indent: 20,
                     endIndent: 20,
                   ),
-                  SizedBox(
-                    height: 300, // Ajustez la hauteur si nécessaire
-                    child: TransactionHistory(),
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      height: 450, // Ajustez la hauteur si nécessaire
+                      child: TransactionHistory(),
+                    ),
                   ),
                 ],
               ),
@@ -442,10 +450,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {},
+        child: Icon(
+          Icons.paypal_outlined,
+          color: inputColor,
+        ),
+        backgroundColor: secondBColor,
+      ),
     );
   }
 
-  String _calculateRemainingTime(DateTime zakatDueDate) {
+  String _calculateRemainingTime(DateTime? zakatDueDate) {
+    if (zakatDueDate == null) {
+      return "La date limite de votre Zakat n'est pas définie.";
+    }
+
     final now = DateTime.now(); // Date actuelle
     final difference =
         zakatDueDate.difference(now); // Différence entre les deux dates
@@ -532,43 +552,6 @@ Widget _statisticWidget(String title, Color color, IconData icon) {
           fontSize: 14,
           color: Colors.black,
         ),
-      ),
-    ],
-  );
-}
-
-Widget _progressBar(String label, double? progress, Color color) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        label,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.black,
-        ),
-      ),
-      const SizedBox(height: 5),
-      Stack(
-        children: [
-          Container(
-            height: 8,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
-          LayoutBuilder(
-            builder: (context, constraints) => Container(
-              width: constraints.maxWidth * progress!,
-              height: 8,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          ),
-        ],
       ),
     ],
   );

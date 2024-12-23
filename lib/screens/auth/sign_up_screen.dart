@@ -14,9 +14,10 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Sign Up"),
-      ),
+      // appBar: AppBar(
+      //   automaticallyImplyLeading: false,
+      //   title: const Text("Register Here !"),
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -25,16 +26,22 @@ class SignUpScreen extends StatelessWidget {
             children: [
               const SizedBox(height: defaultPadding * 3),
 
-              const WelcomeText(
-                title: "Create Account",
-                text: "Enter your Name, Email and Password \nfor sign up.",
-              ),
+              // const WelcomeText(
+              //   title: "Create Account",
+              //   text: "Enter your Name, Email and Password \nfor sign up.",
+              // ),
 
               // Sign Up Form
               const SignUpForm(),
-              const SizedBox(height: defaultPadding),
+              Divider(
+                color: primaryColor,
+                thickness: 0.5,
+                indent: 20,
+                endIndent: 20,
+              ),
+              // const SizedBox(height: defaultPadding),
 
-              // Already have account
+              // Already have account up
               Center(
                 child: Text.rich(
                   TextSpan(
@@ -60,6 +67,7 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: defaultPadding),
+
               Center(
                 child: Text(
                   "By Signing up you agree to our Terms \nConditions & Privacy Policy.",
@@ -68,26 +76,38 @@ class SignUpScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: defaultPadding),
-              kOrText,
-              const SizedBox(height: defaultPadding),
+              // kOrText
 
-              // Facebook
-              Center(
-                child: Column(
-                  children: [
-                    // Google
-                    SocalButton(
-                      press: () {},
-                      text: "Connect with Google",
-                      color: const Color(0xFF4285F4),
-                      icon: SvgPicture.asset(
-                        'assets/icons/google.svg',
-                      ),
-                    ),
-                    const SizedBox(height: defaultPadding),
-                  ],
+              Divider(
+                color: primaryColor,
+                thickness: 0.5,
+                indent: 5,
+                endIndent: 5,
+              ),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: secondBColor,
+                  borderRadius: BorderRadius.circular(15), // Ajout du rayon
                 ),
-              )
+                child: Center(
+                  child: Text(
+                    "Sign Up to manage your donations\nand support those in need with\ntransparency and ease.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              Divider(
+                color: primaryColor,
+                thickness: 0.5,
+                indent: 5,
+                endIndent: 5,
+              ),
             ],
           ),
         ),

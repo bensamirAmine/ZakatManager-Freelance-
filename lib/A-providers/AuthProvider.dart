@@ -21,7 +21,11 @@ class AuthProvider with ChangeNotifier {
   String _message = '';
   String _error = '';
   Livreur? _livreur;
+  String _messageR = '';
+  bool _isRegistered = false;
 
+  String get messageR => _messageR;
+  bool get isRegistered => _isRegistered;
   bool get isLoading => _isLoading;
   bool get isLoggedIn => _isLoggedIn;
   String get token => _token;
@@ -134,6 +138,37 @@ class AuthProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<void> signup({
+    required String firstName,
+    required String lastName,
+    required String userName,
+    required String email,
+    required String phoneNumber,
+    required String password,
+  }) async {
+    _isRegistered = true;
+    notifyListeners();
+
+    try {
+      final result = await _loginService.signupUser(
+        firstName: firstName,
+        lastName: lastName,
+        userName: userName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password,
+      );
+
+      // Vous pouvez manipuler le résultat si nécessaire (par exemple, stocker le token dans SharedPreferences)
+
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> livreurlogin(String email, String password) async {

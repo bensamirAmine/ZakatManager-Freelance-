@@ -9,6 +9,8 @@ class ApiEndpoints {
   // static const ip_adress = '192.168.1.36';
 
 //______________________________ AUTH URL'S API ______________________________
+  static const userregistration = 'http://$ip_adress:1919/auth/User/signup';
+
   static const userlogin = 'http://$ip_adress:1919/auth/login';
   static const profile = 'http://$ip_adress:1919/user/profile';
   static const getHistorique =

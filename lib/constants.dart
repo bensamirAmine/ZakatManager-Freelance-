@@ -71,7 +71,7 @@ final requiredValidator =
     RequiredValidator(errorText: 'This field is required');
 final matchValidator = MatchValidator(errorText: 'passwords do not match');
 
-final phoneNumberValidator = MinLengthValidator(10,
+final phoneNumberValidator = MinLengthValidator(8,
     errorText: 'Phone Number must be at least 10 digits long');
 
 // Common Text

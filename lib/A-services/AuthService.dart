@@ -1,9 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:foodly_ui/A-models/Restaurant.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
-import 'package:foodly_ui/entry_point.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -50,6 +45,39 @@ class AuthService {
         'status': false,
         'error': 'Failed to login: $e',
       };
+    }
+  }
+
+  Future<Map<String, dynamic>> signupUser({
+    required String firstName,
+    required String lastName,
+    required String userName,
+    required String email,
+    required String phoneNumber,
+    required String password,
+  }) async {
+    final url = Uri.parse(ApiEndpoints.userregistration);
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'firstName': firstName,
+        'lastName': lastName,
+        'userName': userName,
+        'email': email,
+        'phoneNumber': phoneNumber,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      // Si une erreur se produit
+      throw Exception('Failed to create user: ${response.body}');
     }
   }
 

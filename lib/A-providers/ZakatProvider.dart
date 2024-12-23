@@ -62,10 +62,10 @@ class ZakatProvider with ChangeNotifier {
       final response = await zakatService.AddTransaction(
           type, category, amount, acquisitionDate);
       _message = response['message'];
-      
+
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.loadUser(context);
-
+      recalculateTotals(context);
       notifyListeners();
 
       developer.log(_message!, name: '_message');
