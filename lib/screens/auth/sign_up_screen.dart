@@ -1,10 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'sign_in_screen.dart';
 
-import '../../components/buttons/socal_button.dart';
-import '../../components/welcome_text.dart';
 import '../../constants.dart';
 import '../signUp/components/sign_up_form.dart';
 
@@ -53,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
                     children: <TextSpan>[
                       TextSpan(
                         text: "Sign In",
-                        style: const TextStyle(color: primaryColor),
+                        style: const TextStyle(color: thirdColor),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () => Navigator.push(
                                 context,
@@ -87,7 +84,7 @@ class SignUpScreen extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: secondBColor,
+                  color: Colors.grey,
                   borderRadius: BorderRadius.circular(15), // Ajout du rayon
                 ),
                 child: Center(

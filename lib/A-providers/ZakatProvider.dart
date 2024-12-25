@@ -77,6 +77,27 @@ class ZakatProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updatetransaction(
+      BuildContext context, String transactionId, double amount) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final zakatService = ZakatService(authProvider: authProvider);
+    final userprovider = Provider.of<UserProvider>(context, listen: false);
+
+    _setLoadingState(true);
+
+    try {
+      _messageD = await zakatService.updateTransaction(transactionId, amount);
+      recalculateTotals(context);
+      userprovider.loadUser(context);
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+    } finally {
+      _setLoadingState(false);
+    }
+  }
+
   Future<void> AddTransaction(BuildContext context, String type,
       String category, double amount, String acquisitionDate) async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);

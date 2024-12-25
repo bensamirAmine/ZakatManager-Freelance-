@@ -10,6 +10,7 @@ import 'package:foodly_ui/A-providers/SupplementProvider.dart';
 import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
 import 'package:foodly_ui/A-providers/commandeprovider.dart';
+import 'package:foodly_ui/entry_point.dart';
 import 'package:foodly_ui/screens/auth/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,8 +29,7 @@ Future<void> main() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String? token = prefs.getString('auth_token');
 
-  // Démarrez l'application
-  runApp(
+   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => ZakatProvider()),

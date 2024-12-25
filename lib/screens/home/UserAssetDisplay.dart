@@ -28,13 +28,13 @@ class UserAssetDisplay extends StatelessWidget {
         _progressBar(
           "Balance",
           balancePercentage,
-          Colors.blue,
+          textColor,
         ),
         const SizedBox(height: 10),
         _progressBar(
           "Gold",
           goldPercentage,
-          Colors.amber,
+          thirdColor,
         ),
         const SizedBox(height: 20),
 
@@ -59,8 +59,11 @@ class UserAssetDisplay extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _legendItem("Cash", primaryColor),
-              _legendItem("Gold", Colors.amber),
+              _legendItem(
+                "Cash",
+                accentColor,
+              ),
+              _legendItem("Gold", primaryGold),
               _legendItem("Silver", Colors.grey),
             ],
           )
@@ -137,13 +140,13 @@ class UserAssetDisplay extends StatelessWidget {
         sections: [
           PieChartSectionData(
             value: balancePercentage,
-            color: Colors.blue,
+            color: textColor,
             title: "",
             titleStyle: const TextStyle(fontSize: 0, color: Colors.white),
           ),
           PieChartSectionData(
             value: goldPercentage,
-            color: Colors.amber,
+            color: thirdColor,
             title: "",
             titleStyle: const TextStyle(fontSize: 0, color: Colors.white),
           ),

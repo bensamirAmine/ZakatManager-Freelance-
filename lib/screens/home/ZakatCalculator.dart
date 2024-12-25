@@ -27,22 +27,14 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
   String simpleCalculatorInput = '';
   String simpleCalculatorResult = '';
 
-  final List<String> assetOptions = [
-    "CASH",
-    "GOLD"
-        "SILVER"
-  ];
+  final List<String> assetOptions = ["CASH", "GOLD", "SILVER"];
   @override
   void initState() {
+    super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final _userProvider = Provider.of<UserProvider>(context, listen: false);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _userProvider.loadUser(
-          context,
-        );
-      });
+      _userProvider.loadUser(context);
     });
-    super.initState();
   }
 
   @override
@@ -54,7 +46,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
           'Add Asset Zaket',
           style: TextStyle(color: inputColor),
         ),
-        backgroundColor: secondBColor, // Couleur de l'AppBar
+        backgroundColor: thirdColor, // Couleur de l'AppBar
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -75,7 +67,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       width: 180,
                       height: 90,
                       child: Card(
-                        color: selectedCard == 0 ? secondBColor : neutralGray,
+                        color: selectedCard == 0 ? thirdColor : neutralGray,
                         elevation: 5,
                         shadowColor: Colors.black38,
                         child: Padding(
@@ -114,7 +106,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       width: 180,
                       height: 90,
                       child: Card(
-                        color: selectedCard == 1 ? secondBColor : neutralGray,
+                        color: selectedCard == 1 ? thirdColor : neutralGray,
                         elevation: 3,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -194,12 +186,12 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.green.shade50,
-            border: Border.all(color: Colors.green, width: 1),
+            border: Border.all(color: accentColor, width: 1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             children: [
-              const Icon(Icons.check_circle, color: Colors.green),
+              const Icon(Icons.check_circle, color: accentColor),
               const SizedBox(width: 10),
               if (simpleCalculatorResult.isNotEmpty)
                 Text(
@@ -207,7 +199,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: accentColor,
                   ),
                 ),
             ],
@@ -284,12 +276,13 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
               Text(
                 'Manage Your Zakat',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: secondaryNavy,
+                      color: primaryColor,
                       fontWeight: FontWeight.bold,
                     ),
               ),
               IconButton(
-                icon: const Icon(Icons.history, color: primaryColor),
+                icon:
+                    const Icon(Icons.work_history_rounded, color: primaryColor),
                 iconSize: 30,
                 onPressed: () {
                   showModalBottomSheet(
@@ -327,8 +320,8 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                     gradient: isActive
                         ? LinearGradient(
                             colors: [
-                              neutralGray,
-                              primaryColor,
+                              thirdColor,
+                              thirdColor,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -337,7 +330,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                     color: isActive ? null : neutralGray,
                     borderRadius: BorderRadius.circular(16),
                     border: isActive
-                        ? Border.all(color: neutralGray, width: 5)
+                        ? Border.all(color: backgroundColor, width: 5)
                         : null,
                   ),
                   child: Column(
@@ -347,7 +340,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       Text(
                         type,
                         style: TextStyle(
-                          color: isActive ? secondaryWhite : Colors.grey[700],
+                          color: isActive ? secondaryWhite : textColor,
                           fontSize: isActive ? 18 : 16,
                           fontWeight:
                               isActive ? FontWeight.bold : FontWeight.normal,
@@ -385,6 +378,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
             ),
           const SizedBox(height: 15),
           DropdownButtonFormField<String>(
+            dropdownColor: backgroundColor,
             value: operation,
             items: ["ADD", "SUBTRACT"]
                 .map((e) => DropdownMenuItem(
@@ -398,7 +392,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
               });
             },
             decoration: InputDecoration(
-              iconColor: secondaryNavy,
+              iconColor: thirdColor,
               labelText: "Operation",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -432,17 +426,28 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
             Center(
               child: Column(
                 children: [
-                  Text(
-                    "Total Gold Value: $totalGoldValue DT",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: primaryGreen,
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.info,
+                          color: thirdColor,
+                        ),
+                        Text(
+                          "Total Gold Value: $totalGoldValue DT",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: secondaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Text(
                     "Gold Price Per Gram: $goldPricePerGram DT",
                     style: const TextStyle(
-                      color: Colors.grey,
+                      color: primaryColor,
                     ),
                   ),
                 ],
@@ -452,7 +457,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
           const SizedBox(height: 15),
           Row(
             children: [
-              const Icon(Icons.date_range, color: primaryColor, size: 30),
+              const Icon(Icons.date_range, color: textColor, size: 30),
               const SizedBox(width: 10),
               Text(
                 "Select Acquisition Date",
@@ -474,7 +479,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                   (assetType != "GOLD" &&
                       (amountInInt == null || amountInInt! <= 0))) {
                 _showFlashMessage(context, "Please enter a valid amount.",
-                    Icons.error, neutralGray);
+                    Icons.error, primaryColor);
 
                 return;
               }
@@ -496,7 +501,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                   : "Operation: $operation, Type: $assetType, Amount: $amountInInt DT";
 
               _showFlashMessage(
-                  context, resultMessage, Icons.check_box, primaryGreen);
+                  context, resultMessage, Icons.check_box, primaryColor);
               setState(() {
                 amountInInt = null;
                 selectedDateNotifier.value = "";
@@ -513,10 +518,11 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
 
   Widget _buildInfoTile({required IconData icon, required String text}) {
     return ListTile(
-      leading: Icon(icon, color: secondaryNavy),
+      leading: Icon(icon, color: primaryColor),
       title: Text(
         text,
-        style: const TextStyle(color: secondaryNavy, fontSize: 14),
+        style: const TextStyle(
+            color: textColor, fontSize: 14, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -526,7 +532,7 @@ void _showFlashMessage(
     BuildContext context, String message, IconData icon, Color color) {
   showFlash(
     context: context,
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 2),
     builder: (context, controller) {
       return Flash(
         controller: controller,
@@ -539,13 +545,13 @@ void _showFlashMessage(
           content: Text(
             message,
             style: const TextStyle(
-              color: Colors.black,
+              color: inputColor,
               fontSize: 16,
             ),
           ),
           icon: Icon(
             icon,
-            color: Colors.black,
+            color: inputColor,
           ),
           controller: controller,
           showProgressIndicator: true,

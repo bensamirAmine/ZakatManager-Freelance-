@@ -1,6 +1,6 @@
 // ignore: file_names
 class ApiEndpoints {
-  static const ip_adress = '192.168.1.126';
+  static const ip_adress = '192.168.196.129';
   // static const ip_adress = '192.168.1.36';
 
 //______________________________ AUTH URL'S API ______________________________
@@ -12,6 +12,9 @@ class ApiEndpoints {
       'http://$ip_adress:1919/zakat/individual/getHistorique';
   static const delete_transaction =
       'http://$ip_adress:1919/zakat/delete_transaction';
+
+  static const updateTransaction =
+      'http://$ip_adress:1919/zakat/updateTransaction';
   static const setTransaction =
       'http://$ip_adress:1919/zakat/individual/setTransaction';
 

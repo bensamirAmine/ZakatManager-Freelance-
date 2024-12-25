@@ -57,9 +57,9 @@ class _SignInFormState extends State<SignInForm> {
                           _selectedRole = newValue;
                         });
                       },
-                      borderColor: secondColor,
-                      selectedColor: secondColor,
-                      unselectedColor: Colors.white,
+                      borderColor: primaryColor,
+                      selectedColor: thirdColor,
+                      unselectedColor: backgroundColor,
                     ),
                   ),
                   const SizedBox(height: 24),

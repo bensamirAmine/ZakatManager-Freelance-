@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/constants.dart';
 
 // Créez un ValueNotifier pour partager l'état
 final ValueNotifier<String> selectedDateNotifier =
@@ -103,7 +104,7 @@ class _DateSpinnerExampleState extends State<DateSpinnerExample> {
                           "Selected Date: $value",
                           style: TextStyle(
                               fontSize: 12,
-                              color: Colors.black,
+                              color: accentColor,
                               fontWeight: FontWeight.normal),
                         );
                       },

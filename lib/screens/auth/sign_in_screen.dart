@@ -10,8 +10,6 @@ import '../../constants.dart';
 import 'sign_up_screen.dart';
 import 'components/sign_in_form.dart';
 
-
-
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
@@ -74,7 +72,7 @@ class _SignInScreenState extends State<SignInScreen>
                       },
                       child: CircleAvatar(
                         radius: 40,
-                        backgroundColor: secondColor,
+                        backgroundColor: secondaryColor,
                         child: Image.asset(
                           'assets/images/logo2.png', // Chemin de l'image
                           fit: BoxFit.cover,
@@ -119,7 +117,6 @@ class _SignInScreenState extends State<SignInScreen>
 
                     // const SizedBox(height: 8),
                     const SignInForm(),
-                    const SizedBox(height: defaultPadding * 2),
 
                     Center(
                       child: Text(
@@ -144,34 +141,19 @@ class _SignInScreenState extends State<SignInScreen>
                       ),
                     ),
                     const SizedBox(height: defaultPadding),
-                    // SocalButton(
-                    //   press: () {},
-                    //   text: "Sign in with Facebook",
-                    //   color: const Color(0xFF395998),
-                    //   icon: SvgPicture.asset(
-                    //     'assets/icons/facebook.svg',
-                    //     colorFilter: const ColorFilter.mode(
-                    //       Color(0xFF395998),
-                    //       BlendMode.srcIn,
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: defaultPadding),
 
-                    // Sign Up Text Section
                     Center(
                       child: Text.rich(
                         TextSpan(
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w600),
+                          style: TextStyle(
+                              color: primaryColor, fontWeight: FontWeight.bold),
                           text: "Don’t have an account? ",
                           children: <TextSpan>[
                             TextSpan(
                               text: "Create one here.",
                               style: const TextStyle(
-                                  color: secondColor,
+                                  color: secondaryColor,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.bold),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () => Navigator.push(
@@ -187,7 +169,7 @@ class _SignInScreenState extends State<SignInScreen>
                       ),
                     ),
                     Divider(
-                      color: Colors.green[700],
+                      color: primaryColor,
                       thickness: 1.5,
                       indent: 20,
                       endIndent: 20,
@@ -198,7 +180,7 @@ class _SignInScreenState extends State<SignInScreen>
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: secondColor,
+                  color: thirdColor,
                   borderRadius: BorderRadius.circular(15), // Ajout du rayon
                 ),
                 child: Center(
@@ -214,7 +196,7 @@ class _SignInScreenState extends State<SignInScreen>
                 ),
               ),
               Divider(
-                color: Colors.green[700],
+                color: primaryColor,
                 thickness: 1.5,
                 indent: 20,
                 endIndent: 20,
