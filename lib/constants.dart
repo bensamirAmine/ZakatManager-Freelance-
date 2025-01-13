@@ -99,6 +99,4 @@ final List<String> organizations = [
   "Maison des Aînés de La Marsa",
   "Association Tunisienne de Lutte Contre le Cancer (ATCC)",
   "Dar Al Amal (Maison de l’Espoir)",
-  "Association Amal pour la Femme et le Développement",
-  "Association Tunisienne pour l’Aide aux Malades Mentaux (ATAMM)",
 ];

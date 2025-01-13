@@ -94,7 +94,7 @@ class _SignInScreenState extends State<SignInScreen>
                     //   },
                     //   child:
                     Text(
-                      "Welcome to Zakat App",
+                      "Bienvenue à Zakatuk	",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 24,
@@ -131,8 +131,8 @@ class _SignInScreenState extends State<SignInScreen>
 
                     SocalButton(
                       press: () {
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .signInWithGoogle(context);
+                        // Provider.of<AuthProvider>(context, listen: false)
+                        //     .signInWithGoogle(context);
                       },
                       text: "Sign in with Google",
                       color: Color.fromARGB(255, 60, 101, 165),
@@ -185,7 +185,7 @@ class _SignInScreenState extends State<SignInScreen>
                 ),
                 child: Center(
                   child: Text(
-                    "Sign in to manage your donations\nand support those in need with\ntransparency and ease.",
+                    "Maîtrisez votre Zakat  \n  avec précision et facilité.	",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16,

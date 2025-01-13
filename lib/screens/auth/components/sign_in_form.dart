@@ -150,7 +150,7 @@ class _SignInFormState extends State<SignInForm> {
                     }
                   },
                   child: const Text(
-                    'Sign In as User',
+                    'Se connecter',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),
@@ -226,7 +226,7 @@ class _SignInFormState extends State<SignInForm> {
                     }
                   },
                   child: const Text(
-                    'Sign In as Bank Client',
+                    'Se connecter en tant que client bancaire',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

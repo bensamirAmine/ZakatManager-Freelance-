@@ -24,13 +24,22 @@ class UserAssetDisplay extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        const SizedBox(
+          height: 15,
+        ),
+        Text(
+            "Chaque contribution ouvre des portes et allège des cœurs Mesurez votre impact"),
+        const SizedBox(
+          height: 15,
+        ),
         // Barres de progression pour Balance et Gold
+
         _progressBar(
-          "Balance",
+          "Cash",
           balancePercentage,
           textColor,
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 20),
         _progressBar(
           "Gold",
           goldPercentage,

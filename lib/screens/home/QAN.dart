@@ -101,7 +101,7 @@ class FAQItem extends StatefulWidget {
 }
 
 class _FAQItemState extends State<FAQItem> {
-  bool isExpanded = true;
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {

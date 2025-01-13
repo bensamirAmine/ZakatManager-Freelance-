@@ -1,6 +1,7 @@
 // ignore: file_names
 class ApiEndpoints {
-  static const ip_adress = '192.168.1.51';
+  // static const ip_adress = '192.168.1.51';
+  static const ip_adress = 'zakatuk.net';
  
 //______________________________ AUTH URL'S API ______________________________
   static const userregistration = 'http://$ip_adress:1919/auth/User/signup';

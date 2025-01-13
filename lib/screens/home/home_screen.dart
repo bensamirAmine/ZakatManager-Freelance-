@@ -85,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Column(
           children: [
             Text(
-              "Zakat".toUpperCase(),
+              "Zakatuk".toUpperCase(),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -254,22 +254,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     indent: 20,
                     endIndent: 20,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        " تمت مطابقة معايير محاسبة الزكاة من قبل هيئة شرعية متخصصة",
-                        style: TextStyle(
-                            color: textColor,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Icon(
-                        Icons.add_alert,
-                        color: primaryColor,
-                      ),
-                    ],
-                  ),
                   if (_user.zakatCalculated)
                     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -295,7 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   SizedBox(width: 8),
                                   Text(
-                                    "Your Zakat will be due on ${zakatDueDate.day}-${zakatDueDate.month}-${zakatDueDate.year}.",
+                                    "Votre Zakat aura lieu le ${zakatDueDate.day}-${zakatDueDate.month}-${zakatDueDate.year}.",
                                     style: TextStyle(
                                       color: inputColor,
                                       fontWeight: FontWeight.bold,
@@ -360,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  "Your Wallet",
+                                  "Mon portefeuille Zakatuk",
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
@@ -399,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Total Balance",
+                            "Total",
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade600,
@@ -480,9 +464,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       itemBuilder: (context, index) {
                         return ListTile(
                           leading: Icon(Icons.business, color: thirdColor),
-                          title: Text(organizations[index]),
+                          title: Text(
+                            organizations[index],
+                            style: TextStyle(fontSize: 12),
+                          ),
                           trailing: Icon(Icons.handshake_outlined,
-                              color: primaryColor, size: 20),
+                              color: primaryColor, size: 15),
                           onTap: () {
                             Navigator.pop(context); // Fermer le Bottom Sheet
                             // Action à effectuer lors de la sélection
@@ -566,7 +553,7 @@ class UserRowWidget extends StatelessWidget {
             ),
           ),
           Text(
-            "Nissab : 19,000 DT",
+            "Nissab :19.933.872 DT",
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: titleColor, fontSize: 15),
           ),

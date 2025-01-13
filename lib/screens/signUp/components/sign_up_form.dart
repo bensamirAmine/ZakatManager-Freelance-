@@ -21,6 +21,7 @@ class _SignUpFormState extends State<SignUpForm> {
   String _firstName = '';
   String _email = '';
   String _password = '';
+  String _confirmPassword = '';
   String _phonenumber = '';
 
   @override
@@ -101,6 +102,22 @@ class _SignUpFormState extends State<SignUpForm> {
                   validator: (value) =>
                       value!.isEmpty ? 'Please enter your password' : null,
                 ),
+                const SizedBox(height: 16),
+                _buildInputField(
+                  label: 'Confirm Password',
+                  icon: Icons.lock,
+                  obscureText: _obscureText,
+                  onChanged: (value) => _confirmPassword = value,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please confirm your password';
+                    }
+                    if (value != _password) {
+                      return 'Passwords do not match';
+                    }
+                    return null;
+                  },
+                ),
                 const SizedBox(height: 30),
                 Consumer<AuthProvider>(
                   builder: (context, authProvider, child) {
@@ -141,8 +158,8 @@ class _SignUpFormState extends State<SignUpForm> {
     try {
       await authProvider.signup(
         userName: _userName,
-        lastName: _firstName,
-        firstName: _lastName,
+        lastName: _lastName,
+        firstName: _firstName,
         email: _email,
         password: _password,
         phoneNumber: _phonenumber,
@@ -165,10 +182,6 @@ class _SignUpFormState extends State<SignUpForm> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(error.toString())),
       );
-    } finally {
-      setState(() {
-        _isRegistered = false;
-      });
     }
   }
 

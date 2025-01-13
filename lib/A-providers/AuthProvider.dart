@@ -1,18 +1,18 @@
 import 'dart:convert';
 
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/livreur.dart';
 import 'package:foodly_ui/A-services/AuthService.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
-import 'package:foodly_ui/entry_point.dart';
+// import 'package:foodly_ui/entry_point.dart';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 
-import 'package:google_sign_in/google_sign_in.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthProvider with ChangeNotifier {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   final AuthService _loginService = AuthService();
   bool _isLoading = false;
@@ -32,51 +32,51 @@ class AuthProvider with ChangeNotifier {
   String get message => _message;
   String get error => _error;
   Livreur? get livreur => _livreur;
-  Future<void> signInWithGoogle(BuildContext context) async {
-    try {
-      final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
-      if (gUser == null) return;
+  // Future<void> signInWithGoogle(BuildContext context) async {
+  //   try {
+  //     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+  //     if (gUser == null) return;
 
-      final GoogleSignInAuthentication gAuth = await gUser.authentication;
+  //     final GoogleSignInAuthentication gAuth = await gUser.authentication;
 
-      final credential = GoogleAuthProvider.credential(
-        accessToken: gAuth.accessToken,
-        idToken: gAuth.idToken,
-      );
-      UserCredential userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
+  //     final credential = GoogleAuthProvider.credential(
+  //       accessToken: gAuth.accessToken,
+  //       idToken: gAuth.idToken,
+  //     );
+  //     UserCredential userCredential =
+  //         await _firebaseAuth.signInWithCredential(credential);
 
-      User? user = userCredential.user;
-      if (user != null) {
-        if (!user.emailVerified) {
-          await user.sendEmailVerification();
-          print("Verification email sent to ${user.email}");
-        }
+  //     User? user = userCredential.user;
+  //     if (user != null) {
+  //       if (!user.emailVerified) {
+  //         await user.sendEmailVerification();
+  //         print("Verification email sent to ${user.email}");
+  //       }
 
-        // Envoi du idToken au backend
-        final result = await sendIdTokenToBackend(gAuth.idToken!);
+  //       // Envoi du idToken au backend
+  //       final result = await sendIdTokenToBackend(gAuth.idToken!);
 
-        if (result['status']) {
-          _token = result['token'];
-          _message = result['message']; // Stockage du message
-          _loginService.saveToken(_token); // Sauvegarde du token
-        } else {
-          // Gestion des erreurs
-          _error = result['error'];
-          print("Erreur lors de l'envoi du idToken: ${_error}");
-          return;
-        }
+  //       if (result['status']) {
+  //         _token = result['token'];
+  //         _message = result['message']; // Stockage du message
+  //         _loginService.saveToken(_token); // Sauvegarde du token
+  //       } else {
+  //         // Gestion des erreurs
+  //         _error = result['error'];
+  //         print("Erreur lors de l'envoi du idToken: ${_error}");
+  //         return;
+  //       }
 
-        // Navigation vers EntryPoint
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => EntryPoint()),
-        );
-      }
-    } catch (e) {
-      print("Error signing in with Google: $e");
-    }
-  }
+  //       // Navigation vers EntryPoint
+  //       Navigator.pushReplacement(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => EntryPoint()),
+  //       );
+  //     }
+  //   } catch (e) {
+  //     print("Error signing in with Google: $e");
+  //   }
+  // }
 
   Future<Map<String, dynamic>> sendIdTokenToBackend(String idToken) async {
     try {
