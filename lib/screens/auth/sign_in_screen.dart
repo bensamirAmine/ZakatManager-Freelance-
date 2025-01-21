@@ -9,6 +9,7 @@ import '../../components/buttons/socal_button.dart';
 import '../../constants.dart';
 import 'sign_up_screen.dart';
 import 'components/sign_in_form.dart';
+import 'package:foodly_ui/sizes.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -20,6 +21,7 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
+  final Duration _animationDuration = const Duration(milliseconds: 400);
 
   @override
   void initState() {
@@ -36,189 +38,242 @@ class _SignInScreenState extends State<SignInScreen>
     super.dispose();
   }
 
+  void _showComingSoonMessage(BuildContext context) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text(
+          'Fonctionnalité bientôt disponible !',
+          style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.black87,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        margin: const EdgeInsets.all(16),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: const SizedBox(),
-      //   title: const Text(
-      //     "Zakat Login",
-      //     style: TextStyle(color: inputColor, fontWeight: FontWeight.bold),
-      //   ),
-      //   centerTitle: true,
-      //   backgroundColor: secondColor,
-      //   elevation: 2,
-      // ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: defaultPadding * 5),
-              Center(
-                child: Column(
-                  children: [
-                    const SizedBox(height: defaultPadding + 5),
-
-                    // Animated Logo
-                    AnimatedBuilder(
-                      animation: _animationController,
-                      builder: (context, child) {
-                        return Transform.scale(
-                          scale: 1 + 0.3 * _animationController.value,
-                          child: child,
-                        );
-                      },
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundColor: secondColor,
-                        child: Image.asset(
-                          'assets/images/logo2.png', // Chemin de l'image
-                          fit: BoxFit.cover,
-                          width: 100, // Ajustez la taille si nécessaire
-                          height: 100,
+      backgroundColor: primaryColor,
+      body: Stack(
+        children: [
+          // Background Design Elements
+          Positioned(
+            top: -100,
+            right: -100,
+            child: Container(
+              width: 200,
+              height: 200,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.05),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -50,
+            left: -50,
+            child: Container(
+              width: 150,
+              height: 150,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withOpacity(0.05),
+              ),
+            ),
+          ),
+          // Main Content
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: IntrinsicHeight(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: ZAppSizes.defaultSpace,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: ZAppSizes.appBarHeight * 1.2),
+                        // Logo with Animation
+                        TweenAnimationBuilder(
+                          duration: _animationDuration,
+                          tween: Tween<double>(begin: 0, end: 1),
+                          builder: (context, double value, child) {
+                            return Transform.scale(
+                              scale: value,
+                              child: child,
+                            );
+                          },
+                          child: Image(
+                            height: 120,
+                            image: AssetImage("assets/images/logo.png"),
+                          ),
                         ),
-                      ),
-                    ),
-
-                    const SizedBox(height: defaultPadding),
-                    // Welcome Text Section
-                    // AnimatedBuilder(
-                    //   animation: _animationController,
-                    //   builder: (context, child) {
-                    //     return Transform.scale(
-                    //       scale: 1 + 0.3 * _animationController.value,
-                    //       child: child,
-                    //     );
-                    //   },
-                    //   child:
-                    Text(
-                      "Welcome to Zakat App",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: titleColor,
-                      ),
-                    ),
-                    // ),
-                    const SizedBox(height: defaultPadding),
-
-                    Center(
-                      child: Column(
-                        children: [
-                          // Autres widgets
-                          const AnimatedText(),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: defaultPadding * 2),
-
-                    // const SizedBox(height: 8),
-                    const SignInForm(),
-                    const SizedBox(height: defaultPadding * 2),
-
-                    Center(
-                      child: Text(
-                        "OR",
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: titleColor,
+                        const SizedBox(height: ZAppSizes.spaceBtwItems),
+                        // Welcome Text
+                        FadeTransition(
+                          opacity: _animationController,
+                          child: Text(
+                            "Bienvenue sur Zakatuk",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineMedium
+                                ?.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: defaultPadding),
+                        const SizedBox(height: ZAppSizes.sm),
+                        Text(
+                          "Votre compagnon de confiance pour la Zakat",
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.white.withOpacity(0.8),
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: ZAppSizes.spaceBtwSections),
 
-                    SocalButton(
-                      press: () {
-                        Provider.of<AuthProvider>(context, listen: false)
-                            .signInWithGoogle(context);
-                      },
-                      text: "Sign in with Google",
-                      color: Color.fromARGB(255, 60, 101, 165),
-                      icon: SvgPicture.asset(
-                        'assets/icons/google.svg',
-                      ),
-                    ),
-                    const SizedBox(height: defaultPadding),
-                    // SocalButton(
-                    //   press: () {},
-                    //   text: "Sign in with Facebook",
-                    //   color: const Color(0xFF395998),
-                    //   icon: SvgPicture.asset(
-                    //     'assets/icons/facebook.svg',
-                    //     colorFilter: const ColorFilter.mode(
-                    //       Color(0xFF395998),
-                    //       BlendMode.srcIn,
-                    //     ),
-                    //   ),
-                    // ),
-                    // const SizedBox(height: defaultPadding),
+                        // Sign In Form
+                        Container(
+                          padding: const EdgeInsets.all(24),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: Colors.white.withOpacity(0.1),
+                            ),
+                          ),
+                          child: Column(
+                            children: [
+                              const SignInForm(),
+                              const SizedBox(height: ZAppSizes.spaceBtwItems),
 
-                    // Sign Up Text Section
-                    Center(
-                      child: Text.rich(
-                        TextSpan(
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(fontWeight: FontWeight.w600),
-                          text: "Don’t have an account? ",
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: "Create one here.",
-                              style: const TextStyle(
-                                  color: secondColor,
-                                  fontWeight: FontWeight.bold),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () => Navigator.push(
+                              // Divider
+                              Row(
+                                children: [
+                                  Expanded(
+                                      child: Divider(
+                                          color:
+                                              Colors.white.withOpacity(0.2))),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16),
+                                    child: Text(
+                                      "Ou continuer avec",
+                                      style: TextStyle(
+                                          color: Colors.white.withOpacity(0.6)),
+                                    ),
+                                  ),
+                                  Expanded(
+                                      child: Divider(
+                                          color:
+                                              Colors.white.withOpacity(0.2))),
+                                ],
+                              ),
+
+                              const SizedBox(height: ZAppSizes.spaceBtwItems),
+
+                              // Social Login Buttons
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  _buildSocialButton(
+                                    "assets/icons/google.svg",
+                                    () => _showComingSoonMessage(context),
+                                  ),
+                                  const SizedBox(
+                                      width: ZAppSizes.spaceBtwItems),
+                                  _buildSocialButton(
+                                    "assets/icons/facebook.svg",
+                                    () => _showComingSoonMessage(context),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: ZAppSizes.spaceBtwItems),
+
+                        // Sign Up Link
+                        RichText(
+                          text: TextSpan(
+                            text: "Vous n'avez pas de compte? ",
+                            style:
+                                TextStyle(color: Colors.white.withOpacity(0.8)),
+                            children: [
+                              TextSpan(
+                                text: "S'inscrire",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
                                             const SignUpScreen(),
                                       ),
-                                    ),
-                            ),
-                          ],
+                                    );
+                                  },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.green[700],
-                      thickness: 1.5,
-                      indent: 20,
-                      endIndent: 20,
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: secondColor,
-                  borderRadius: BorderRadius.circular(15), // Ajout du rayon
-                ),
-                child: Center(
-                  child: Text(
-                    "Sign in to manage your donations\nand support those in need with\ntransparency and ease.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                        const Spacer(),
+                        // Version text at bottom
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 16),
+                          child: Text(
+                            'Version de test',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.5),
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
               ),
-              Divider(
-                color: Colors.green[700],
-                thickness: 1.5,
-                indent: 20,
-                endIndent: 20,
-              ),
-              const SizedBox(height: defaultPadding),
-            ],
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocialButton(String iconPath, VoidCallback onTap) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white.withOpacity(0.2)),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: SvgPicture.asset(
+            iconPath,
+            height: 24,
+            width: 24,
           ),
         ),
       ),

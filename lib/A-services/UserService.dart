@@ -1,11 +1,9 @@
-import 'package:foodly_ui/A-models/Restaurant.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:developer' as developer;
 
-import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
   final AuthProvider authProvider;

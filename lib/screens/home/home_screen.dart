@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ((_user!.goldWeight * _user.goldPricePerGram) / _user.zakatAmount) *
             100;
     DateTime? nissabDate = _user.NissabAcquisitionDate; // Date d'acquisition
-    DateTime zakatDueDate = nissabDate!.add(Duration(days: 365)); // +1 an
+    DateTime zakatDueDate = nissabDate != null ? nissabDate.add(Duration(days: 365)) : DateTime.now(); // +1 an
 
     // Obtenir la date actuelle
     DateTime currentDate = DateTime.now();
@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Column(
                         children: [
                           Text(
-                            _user!.lastName + "  " + _user.firstName,
+                            _user.lastName + "  " + _user.firstName,
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineSmall!

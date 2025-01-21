@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/UserModel.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
-import 'package:foodly_ui/A-services/AuthService.dart';
 import 'package:foodly_ui/A-services/MenuService.dart';
 import 'package:foodly_ui/A-services/RestaurantService.dart';
 import 'dart:developer' as developer;

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-providers/RestaurantProvider.dart';
 import 'package:provider/provider.dart';
 import '../../../components/cards/medium/restaurant_info_medium_card.dart';
 import '../../../components/scalton/medium_card_scalton.dart';
 import '../../../constants.dart';
 import '../../details/details_screen.dart';
-import 'dart:developer' as developer;
 
 class MediumCardList extends StatefulWidget {
   const MediumCardList({super.key});

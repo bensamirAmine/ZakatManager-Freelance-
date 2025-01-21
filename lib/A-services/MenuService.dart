@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:http/http.dart' as http;

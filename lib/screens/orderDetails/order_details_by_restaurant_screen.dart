@@ -1,8 +1,6 @@
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/screens/Commande/CommandePage.dart';
-import 'package:foodly_ui/screens/onboarding/onboarding_scrreen.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import '../../components/buttons/primary_button.dart';
 import '../../constants.dart';

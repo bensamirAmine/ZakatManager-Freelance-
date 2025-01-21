@@ -2,11 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/MenuItem.dart';
-import 'package:foodly_ui/A-models/Restaurant.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
-import 'package:foodly_ui/A-services/AuthService.dart';
 import 'package:foodly_ui/A-services/MenuService.dart';
-import 'package:foodly_ui/A-services/RestaurantService.dart';
 import 'dart:developer' as developer;
 
 import 'package:provider/provider.dart';

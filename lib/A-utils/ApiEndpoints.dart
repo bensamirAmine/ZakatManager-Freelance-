@@ -5,7 +5,7 @@ class ApiEndpoints {
   // ignore: constant_identifier_names
   // static const ip_adress = '192.168.1.68';
 
-  static const ip_adress = '192.168.1.126';
+  static const ip_adress = '51.79.165.181';
   // static const ip_adress = '192.168.1.36';
 
 //______________________________ AUTH URL'S API ______________________________

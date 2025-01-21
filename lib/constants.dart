@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 
 const titleColor = Color(0xFF010F07);
-const Color primaryColor = Color(0xFF003366);
+// const Color primaryColor = Color(0xFF003366);
 const Color secondBColor = Color.fromARGB(255, 23, 71, 120);
+
+const Color primaryColor = Color.fromARGB(255, 7, 51, 51);
+const Color secondaryColor = Color.fromARGB(255, 0, 102, 102);
+const Color accentColor = Color.fromARGB(255, 249, 244, 159);//rgb(249, 244, 159)
 
 const Color backgroundColor = Color(0xFFF5F5F5); // Gris très clair
 
@@ -17,7 +21,7 @@ const Color secondaryNavy = Color.fromARGB(255, 44, 62, 80);
 const Color accentOrange = Color.fromARGB(255, 244, 162, 97);
 const Color neutralGray = Color.fromARGB(255, 234, 234, 234);
 
-const accentColor = Color(0xFFEF9920);
+// const accentColor = Color(0xFFEF9920);
 const bodyTextColor = Color(0xFF868686);
 const inputColor = Color(0xFFFBFBFB);
 const double smalltitle = 16;
@@ -71,7 +75,7 @@ final requiredValidator =
     RequiredValidator(errorText: 'This field is required');
 final matchValidator = MatchValidator(errorText: 'passwords do not match');
 
-final phoneNumberValidator = MinLengthValidator(10,
+final phoneNumberValidator = MinLengthValidator(8,
     errorText: 'Phone Number must be at least 10 digits long');
 
 // Common Text

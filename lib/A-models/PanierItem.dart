@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 
 import 'package:foodly_ui/A-models/MenuItem.dart';
 import 'package:foodly_ui/A-models/supplement.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/screens/auth/sign_in_screen.dart';
 import '../../phoneLogin/phone_login_screen.dart';
 
 import '../../../constants.dart';
@@ -80,6 +81,21 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
             ),
           ),
+          TextFormField(
+            validator: phoneNumberValidator.call,
+            autofocus: true,
+            onSaved: (value) => value,
+            style: Theme.of(context)
+                .textTheme
+                .bodyMedium!
+                .copyWith(color: titleColor),
+            cursorColor: primaryColor,
+            keyboardType: TextInputType.phone,
+            decoration: const InputDecoration(
+              hintText: "Phone Number",
+              contentPadding: kTextFieldPadding,
+            ),
+          ),
           const SizedBox(height: defaultPadding),
           // Sign Up Button
           ElevatedButton(
@@ -87,7 +103,7 @@ class _SignUpFormState extends State<SignUpForm> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => const PghoneLoginScreen(),
+                  builder: (_) => const SignInScreen(),
                 ),
               );
             },

@@ -1,12 +1,7 @@
-import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:foodly_ui/A-models/Commande.dart';
-import 'package:foodly_ui/A-models/MenuItem.dart';
 
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
-import 'package:foodly_ui/A-services/PanierService.dart';
 import 'package:foodly_ui/A-services/commandeService.dart';
-import 'dart:developer' as developer;
 
 import 'package:provider/provider.dart';
 

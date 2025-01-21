@@ -1,10 +1,8 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/Restaurant.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:foodly_ui/screens/details/components/RestaurantMenuPage.dart';
-import 'dart:developer' as developer;
 
 import '../../../constants.dart';
 import 'featured_item_card.dart';

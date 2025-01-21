@@ -1,6 +1,4 @@
-import 'dart:developer' as developer;
 
-import 'package:foodly_ui/A-models/MenuItem.dart';
 
 class Supplement {
   final String id;

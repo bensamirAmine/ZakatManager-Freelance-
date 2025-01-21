@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 
 class MenuItem {
   final String id;

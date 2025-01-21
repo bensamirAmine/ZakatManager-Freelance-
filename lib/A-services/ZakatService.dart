@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:foodly_ui/A-models/PanierItem.dart';
 import 'package:foodly_ui/A-models/Transaction.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';

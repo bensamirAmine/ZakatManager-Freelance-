@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'components/body.dart';
 
 class FeaturedScreen extends StatelessWidget {
   const FeaturedScreen({super.key});

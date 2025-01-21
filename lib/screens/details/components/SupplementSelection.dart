@@ -3,7 +3,6 @@ import 'package:foodly_ui/A-providers/PanierProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:provider/provider.dart';
 import 'package:foodly_ui/A-providers/SupplementProvider.dart';
-import 'package:foodly_ui/constants.dart';
 
 class SupplementSelectionDialog extends StatefulWidget {
   final String menuItemId;
