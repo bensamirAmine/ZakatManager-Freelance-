@@ -1,6 +1,8 @@
+import 'package:carousel_slider/carousel_options.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:foodly_ui/screens/home/DateSpinnerExample.dart';
@@ -25,21 +27,26 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
   String simpleCalculatorInput = '';
   String simpleCalculatorResult = '';
 
-  final List<String> assetOptions = [
-    "CASH",
-    "GOLD"
-        "SILVER"
-  ];
+  final List<String> assetOptions = ["CASH", "GOLD", "SILVER"];
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final _userProvider = Provider.of<UserProvider>(context, listen: false);
+      _userProvider.loadUser(context);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text(
-          'Add Asset Zaket',
+          'Mon portefeuille Zakatuk',
           style: TextStyle(color: inputColor),
         ),
-        backgroundColor: secondBColor, // Couleur de l'AppBar
+        backgroundColor: thirdColor, // Couleur de l'AppBar
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -48,7 +55,26 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Les normes comptables de la Zakatuk ont été \n vérifiées par un conseil spécialisé de la charia.	",
+                    style: TextStyle(
+                        color: textColor,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Icon(
+                    Icons.add_alert,
+                    color: primaryColor,
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 5,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   GestureDetector(
                     onTap: () {
@@ -57,11 +83,12 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       });
                     },
                     child: Container(
-                      width: 180,
+                      width: 150,
                       height: 90,
                       child: Card(
-                        color: selectedCard == 0 ? secondBColor : neutralGray,
-                        elevation: 10,
+                        color: selectedCard == 0 ? thirdColor : neutralGray,
+                        elevation: 5,
+                        shadowColor: Colors.black38,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
@@ -76,6 +103,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                               Text(
                                 "Simple Calculator",
                                 style: TextStyle(
+                                  fontSize: 10,
                                   color: selectedCard == 0
                                       ? Colors.white
                                       : Colors.black,
@@ -95,10 +123,10 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       });
                     },
                     child: Container(
-                      width: 180,
+                      width: 150,
                       height: 90,
                       child: Card(
-                        color: selectedCard == 1 ? secondBColor : neutralGray,
+                        color: selectedCard == 1 ? thirdColor : neutralGray,
                         elevation: 3,
                         child: Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -111,8 +139,9 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                                     : Colors.white,
                               ),
                               Text(
-                                "Manage  wallet ",
+                                " calculateur Avancé ",
                                 style: TextStyle(
+                                  fontSize: 10,
                                   color: selectedCard == 1
                                       ? Colors.white
                                       : Colors.black,
@@ -150,14 +179,14 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          "Simple Calculator",
+          "  Calculateur simple",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         TextField(
           keyboardType: TextInputType.number,
           decoration: const InputDecoration(
-            labelText: "Enter amount in DT",
+            labelText: "Entrer un montant  en DT",
             border: OutlineInputBorder(),
           ),
           onChanged: (value) {
@@ -178,20 +207,20 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
           padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.green.shade50,
-            border: Border.all(color: Colors.green, width: 1),
+            border: Border.all(color: accentColor, width: 1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Row(
             children: [
-              const Icon(Icons.check_circle, color: Colors.green),
+              const Icon(Icons.check_circle, color: accentColor),
               const SizedBox(width: 10),
               if (simpleCalculatorResult.isNotEmpty)
                 Text(
-                  "Zakat to pay: $simpleCalculatorResult DT",
+                  "Zakat à payé: $simpleCalculatorResult DT",
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                    color: accentColor,
                   ),
                 ),
             ],
@@ -213,7 +242,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                 const SizedBox(width: 10),
                 const Flexible(
                   child: Text(
-                    "The total assets (cash and gold) must exceed 13,000 DT to be eligible for zakat.",
+                    "Le total des actifs (espèces, or et argent) doit dépasser 19 933 872 DT pour être éligible à la Zakat..",
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
@@ -226,7 +255,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                 const SizedBox(width: 10),
                 const Flexible(
                   child: Text(
-                    "The amount must remain unchanged for a full year (one lunar year).",
+                    "La Zakat devient obligatoire lorsque le seuil minimum (nissab) est atteint et qu'une année lunaire complète (hawl) s'est écoulée, à condition que le montant ne soit pas descendu en dessous de ce seuil pendant cette période.",
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
@@ -239,7 +268,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                 const SizedBox(width: 10),
                 const Flexible(
                   child: Text(
-                    "Zakat rate is 2.5% of the total eligible assets.",
+                    "Le taux de la Zakat est fixé à 2,5 % de la valeur totale des actifs éligibles.	",
                     style: TextStyle(fontSize: 14),
                   ),
                 ),
@@ -266,14 +295,15 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Manage Your Zakat',
+                'Gérer Your Zakat',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: secondaryNavy,
+                      color: primaryColor,
                       fontWeight: FontWeight.bold,
                     ),
               ),
               IconButton(
-                icon: const Icon(Icons.history, color: primaryColor),
+                icon:
+                    const Icon(Icons.work_history_rounded, color: primaryColor),
                 iconSize: 30,
                 onPressed: () {
                   showModalBottomSheet(
@@ -290,7 +320,11 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
           ),
           const SizedBox(height: 10),
           CarouselSlider(
-            items: ["CASH", "GOLD", "SILVER", "SALARY"].map((type) {
+            items: [
+              "CASH",
+              "GOLD",
+              "SILVER",
+            ].map((type) {
               final isActive = assetType == type;
               return GestureDetector(
                 onTap: () {
@@ -311,8 +345,8 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                     gradient: isActive
                         ? LinearGradient(
                             colors: [
-                              neutralGray,
-                              primaryColor,
+                              thirdColor,
+                              thirdColor,
                             ],
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
@@ -321,7 +355,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                     color: isActive ? null : neutralGray,
                     borderRadius: BorderRadius.circular(16),
                     border: isActive
-                        ? Border.all(color: neutralGray, width: 5)
+                        ? Border.all(color: backgroundColor, width: 5)
                         : null,
                   ),
                   child: Column(
@@ -331,7 +365,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                       Text(
                         type,
                         style: TextStyle(
-                          color: isActive ? secondaryWhite : Colors.grey[700],
+                          color: isActive ? secondaryWhite : textColor,
                           fontSize: isActive ? 18 : 16,
                           fontWeight:
                               isActive ? FontWeight.bold : FontWeight.normal,
@@ -359,16 +393,17 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
             _buildInfoTile(
               icon: Icons.info_outline,
               text:
-                  "Only gold intended for sale is eligible for Zakat, while gold worn as personal adornment is not.",
+                  "La zakat n'est due que sur l'or conservé pour préserver sa valeur ou destiné à la vente. En revanche, l'or utilisé à des fins personnelles n'est pas soumis à la zakat..",
             ),
           if (assetType == "CASH")
             _buildInfoTile(
               icon: Icons.info_outline,
               text:
-                  "If you have any debts, they should be subtracted from the total cash value before calculating Zakat.",
+                  "En cas de dettes, leur montant doit être déduit de la valeur totale des liquidités.	.",
             ),
           const SizedBox(height: 15),
           DropdownButtonFormField<String>(
+            dropdownColor: backgroundColor,
             value: operation,
             items: ["ADD", "SUBTRACT"]
                 .map((e) => DropdownMenuItem(
@@ -382,7 +417,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
               });
             },
             decoration: InputDecoration(
-              iconColor: secondaryNavy,
+              iconColor: thirdColor,
               labelText: "Operation",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -416,17 +451,28 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
             Center(
               child: Column(
                 children: [
-                  Text(
-                    "Total Gold Value: $totalGoldValue DT",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: primaryGreen,
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.info,
+                          color: thirdColor,
+                        ),
+                        Text(
+                          "Total Gold Value: $totalGoldValue DT",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: secondaryColor,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Text(
                     "Gold Price Per Gram: $goldPricePerGram DT",
                     style: const TextStyle(
-                      color: Colors.grey,
+                      color: primaryColor,
                     ),
                   ),
                 ],
@@ -436,7 +482,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
           const SizedBox(height: 15),
           Row(
             children: [
-              const Icon(Icons.date_range, color: primaryColor, size: 30),
+              const Icon(Icons.date_range, color: textColor, size: 30),
               const SizedBox(width: 10),
               Text(
                 "Select Acquisition Date",
@@ -458,13 +504,12 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                   (assetType != "GOLD" &&
                       (amountInInt == null || amountInInt! <= 0))) {
                 _showFlashMessage(context, "Please enter a valid amount.",
-                    Icons.error, neutralGray);
+                    Icons.error, primaryColor);
 
                 return;
               }
 
               final date = selectedDateNotifier.value;
-
               final category = assetType;
               final type = operation;
               final double amount = assetType == "GOLD"
@@ -481,7 +526,7 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
                   : "Operation: $operation, Type: $assetType, Amount: $amountInInt DT";
 
               _showFlashMessage(
-                  context, resultMessage, Icons.check_box, primaryGreen);
+                  context, resultMessage, Icons.check_box, primaryColor);
               setState(() {
                 amountInInt = null;
                 selectedDateNotifier.value = "";
@@ -498,10 +543,11 @@ class _AddAssetZaketPageState extends State<AddAssetZaketPage> {
 
   Widget _buildInfoTile({required IconData icon, required String text}) {
     return ListTile(
-      leading: Icon(icon, color: secondaryNavy),
+      leading: Icon(icon, color: primaryColor),
       title: Text(
         text,
-        style: const TextStyle(color: secondaryNavy, fontSize: 14),
+        style: const TextStyle(
+            color: textColor, fontSize: 14, fontWeight: FontWeight.w600),
       ),
     );
   }
@@ -511,7 +557,7 @@ void _showFlashMessage(
     BuildContext context, String message, IconData icon, Color color) {
   showFlash(
     context: context,
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 2),
     builder: (context, controller) {
       return Flash(
         controller: controller,
@@ -524,13 +570,13 @@ void _showFlashMessage(
           content: Text(
             message,
             style: const TextStyle(
-              color: Colors.black,
+              color: inputColor,
               fontSize: 16,
             ),
           ),
           icon: Icon(
             icon,
-            color: Colors.black,
+            color: inputColor,
           ),
           controller: controller,
           showProgressIndicator: true,

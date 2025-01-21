@@ -36,7 +36,7 @@ class ZakatService {
       } else {
         final responseBody = jsonDecode(response.body);
         return {
-          'message': responseBody['message'] ?? 'Error adding item to panier'
+          'message': responseBody['message'] ?? 'Error adding transaction'
         };
       }
     } catch (error) {
@@ -55,6 +55,40 @@ class ZakatService {
       return UserTotals.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to recalculate totals');
+    }
+  }
+
+  Future<String> deleteTransaction(String transactionID) async {
+    final url = Uri.parse(ApiEndpoints.delete_transaction);
+    final response = await http.post(
+      url,
+      headers: _buildHeaders(authProvider.token),
+      body: jsonEncode({
+        'transactionID': transactionID,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return jsonData['message'];
+    } else {
+      throw Exception("Failed to fetch orders. Server error.");
+    }
+  }
+
+  Future<String> updateTransaction(String transactionID, double amount) async {
+    final url = Uri.parse(ApiEndpoints.updateTransaction);
+    final response = await http.post(
+      url,
+      headers: _buildHeaders(authProvider.token),
+      body: jsonEncode({'transactionID': transactionID, 'amount': amount}),
+    );
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return jsonData['message'];
+    } else {
+      throw Exception("Failed to fetch orders. Server error.");
     }
   }
 

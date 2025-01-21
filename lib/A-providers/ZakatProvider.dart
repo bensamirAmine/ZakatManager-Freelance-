@@ -10,19 +10,27 @@ import 'dart:developer' as developer;
 import 'package:provider/provider.dart';
 
 class ZakatProvider with ChangeNotifier {
-  bool _isLoading = false;
   String? _errorMessage;
+  List<Transaction> _history = [];
+  bool _isLoading = false;
   MenuItem? _menuItem;
   String? _message;
-  double? _zakatAmount;
   String? _message3;
-  List<Transaction> _history = [];
+  String? _messageD;
+  double? _zakatAmount;
 
   bool get isLoading => _isLoading;
+
   String? get errorMessage => _errorMessage;
+
   String? get message => _message;
+
+  String? get messageD => _messageD;
+
   double? get zakatAmount => _zakatAmount;
+
   String? get messageU => _message3;
+
   List<Transaction> get history => _history;
 
   MenuItem? get menu => _menuItem;
@@ -40,10 +48,48 @@ class ZakatProvider with ChangeNotifier {
       _history = userTotals.history;
 
       notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+    } finally {
+      _setLoadingState(false);
+    }
+  }
 
-      developer.log('Total: $_zakatAmount', name: '_total');
-      developer.log('History: ${_history.length} transactions',
-          name: '_history');
+  Future<void> deleteTransaction(
+      BuildContext context, String transactionId) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final zakatService = ZakatService(authProvider: authProvider);
+
+    _setLoadingState(true);
+
+    try {
+      _messageD = await zakatService.deleteTransaction(transactionId);
+      // await recalculateTotals(context);
+      _history = _history.where((tx) => tx.id != transactionId).toList();
+
+      notifyListeners();
+    } catch (e) {
+      _errorMessage = e.toString();
+      notifyListeners();
+    } finally {
+      _setLoadingState(false);
+    }
+  }
+
+  Future<void> updatetransaction(
+      BuildContext context, String transactionId, double amount) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final zakatService = ZakatService(authProvider: authProvider);
+    final userprovider = Provider.of<UserProvider>(context, listen: false);
+
+    _setLoadingState(true);
+
+    try {
+      _messageD = await zakatService.updateTransaction(transactionId, amount);
+      recalculateTotals(context);
+      userprovider.loadUser(context);
+      notifyListeners();
     } catch (e) {
       _errorMessage = e.toString();
       notifyListeners();
@@ -62,9 +108,10 @@ class ZakatProvider with ChangeNotifier {
       final response = await zakatService.AddTransaction(
           type, category, amount, acquisitionDate);
       _message = response['message'];
+
       final userProvider = Provider.of<UserProvider>(context, listen: false);
       await userProvider.loadUser(context);
-
+      recalculateTotals(context);
       notifyListeners();
 
       developer.log(_message!, name: '_message');

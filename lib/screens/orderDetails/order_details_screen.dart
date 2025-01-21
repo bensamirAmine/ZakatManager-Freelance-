@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/A-providers/RestaurantProvider.dart';
 import 'package:provider/provider.dart';
+import '../../components/buttons/primary_button.dart';
 import '../../constants.dart';
 import 'components/order_item_card.dart';
+import 'components/price_row.dart';
+import 'components/total_price.dart';
 import 'package:foodly_ui/A-providers/PanierProvider.dart'; // Assurez-vous que ce chemin est correct
 
 class OrderDetailsScreen extends StatelessWidget {

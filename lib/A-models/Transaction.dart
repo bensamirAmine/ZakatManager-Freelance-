@@ -6,8 +6,7 @@ class UserTotals {
 
   factory UserTotals.fromJson(Map<String, dynamic> json) {
     return UserTotals(
-      total: (json['total'] as num).toDouble(), // Conversion en double
-
+      total: (json['total'] as num).toDouble(),
       history: (json['history'] as List<dynamic>)
           .map((item) => Transaction.fromJson(item))
           .toList(),
@@ -23,12 +22,15 @@ class UserTotals {
 }
 
 class Transaction {
+  final String id;
+
   final String type;
   final String category;
   final double amount;
   final DateTime acquisitionDate;
 
   Transaction({
+    required this.id,
     required this.type,
     required this.category,
     required this.amount,
@@ -37,6 +39,8 @@ class Transaction {
 
   factory Transaction.fromJson(Map<String, dynamic> json) {
     return Transaction(
+      id: json['_id'] as String,
+
       type: json['type'],
       category: json['category'],
       amount: (json['amount'] as num).toDouble(), // Conversion en double
@@ -46,6 +50,7 @@ class Transaction {
 
   Map<String, dynamic> toJson() {
     return {
+      '_id': id,
       'type': type,
       'category': category,
       'amount': amount,

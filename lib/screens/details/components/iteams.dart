@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/Restaurant.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:foodly_ui/screens/details/components/RestaurantMenuPage.dart';
+import 'package:foodly_ui/screens/details/details_screen.dart';
 import '../../../components/cards/iteam_card.dart';
 import '../../../constants.dart';
+import '../../addToOrder/add_to_order_screen.dart';
 
 class Items extends StatefulWidget {
   final Restaurant restaurant;

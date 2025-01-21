@@ -1,4 +1,6 @@
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/A-models/MenuItem.dart';
 
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-services/LivreurService.dart';

@@ -14,11 +14,11 @@ class User {
   final bool etatDelete;
   final bool verified;
   final String role;
-  final double balance;
-  final double goldWeight;
-  final double goldPricePerGram;
+  final double? balance;
+  final double? goldWeight;
+  final double? goldPricePerGram;
   final bool zakatCalculated;
-  final double zakatAmount;
+  final double? zakatAmount;
   final DateTime? NissabAcquisitionDate;
   final List<dynamic> transactionHistory;
   final DateTime createdAt;
@@ -41,17 +41,16 @@ class User {
     this.verified = false,
     this.role = 'USER',
     this.balance = 0.0,
-    this.goldWeight = 0.0,
-    this.goldPricePerGram = 0.0,
+    this.goldWeight,
+    this.goldPricePerGram,
     this.zakatCalculated = false,
+    this.zakatAmount,
     this.NissabAcquisitionDate,
-    this.zakatAmount = 0.0,
     this.transactionHistory = const [],
     required this.createdAt,
     required this.updatedAt,
   });
 
-  // Factory constructor to parse JSON data (from MongoDB)
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['_id'] as String,
@@ -70,11 +69,11 @@ class User {
       etatDelete: json['etatDelete'] as bool? ?? false,
       verified: json['verified'] as bool? ?? false,
       role: json['role'] as String? ?? 'USER',
-      balance: (json['balance'] as num?)?.toDouble() ?? 0.0,
-      goldWeight: (json['goldWeight'] as num?)?.toDouble() ?? 0.0,
-      goldPricePerGram: (json['goldPricePerGram'] as num?)?.toDouble() ?? 0.0,
+      balance: (json['balance'] as num?)?.toDouble(),
+      goldWeight: (json['goldWeight'] as num?)?.toDouble(),
+      goldPricePerGram: (json['goldPricePerGram'] as num?)?.toDouble(),
       zakatCalculated: json['zakatCalculated'] as bool? ?? false,
-      zakatAmount: (json['zakatAmount'] as num?)?.toDouble() ?? 0.0,
+      zakatAmount: (json['zakatAmount'] as num?)?.toDouble(),
       NissabAcquisitionDate: json['NissabAcquisitionDate'] != null
           ? DateTime.parse(json['NissabAcquisitionDate'])
           : null,
@@ -84,7 +83,6 @@ class User {
     );
   }
 
-  // Method to convert the Dart object back to JSON (e.g., to send to server)
   Map<String, dynamic> toJson() {
     return {
       '_id': id,

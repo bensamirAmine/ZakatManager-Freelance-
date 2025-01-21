@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:foodly_ui/A-models/Restaurant.dart';
+import 'package:foodly_ui/A-providers/AuthProvider.dart';
+import 'package:foodly_ui/A-providers/RestaurantProvider.dart';
 import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
+import 'package:foodly_ui/components/small_dot.dart';
 import 'package:foodly_ui/constants.dart';
 import 'package:provider/provider.dart';
 

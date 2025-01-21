@@ -48,6 +48,39 @@ class AuthService {
     }
   }
 
+  Future<Map<String, dynamic>> signupUser({
+    required String firstName,
+    required String lastName,
+    required String userName,
+    required String email,
+    required String phoneNumber,
+    required String password,
+  }) async {
+    final url = Uri.parse(ApiEndpoints.userregistration);
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'firstName': firstName,
+        'lastName': lastName,
+        'userName': userName,
+        'email': email,
+        'phoneNumber': phoneNumber,
+        'password': password,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return json.decode(response.body);
+    } else {
+      // Si une erreur se produit
+      throw Exception('Failed to create user: ${response.body}');
+    }
+  }
+
   Future<Map<String, dynamic>> livreurLogin(
       String email, String password) async {
     final url = Uri.parse(ApiEndpoints.livreurlogin);

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/livreur.dart';
 import 'package:foodly_ui/A-services/AuthService.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
-import 'package:foodly_ui/entry_point.dart';
+// import 'package:foodly_ui/entry_point.dart';
 import 'dart:developer' as developer;
 import 'package:http/http.dart' as http;
 
@@ -21,7 +21,11 @@ class AuthProvider with ChangeNotifier {
   String _message = '';
   String _error = '';
   Livreur? _livreur;
+  String _messageR = '';
+  bool _isRegistered = false;
 
+  String get messageR => _messageR;
+  bool get isRegistered => _isRegistered;
   bool get isLoading => _isLoading;
   bool get isLoggedIn => _isLoggedIn;
   String get token => _token;
@@ -134,6 +138,37 @@ class AuthProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  Future<void> signup({
+    required String firstName,
+    required String lastName,
+    required String userName,
+    required String email,
+    required String phoneNumber,
+    required String password,
+  }) async {
+    _isRegistered = true;
+    notifyListeners();
+
+    try {
+      final result = await _loginService.signupUser(
+        firstName: firstName,
+        lastName: lastName,
+        userName: userName,
+        email: email,
+        phoneNumber: phoneNumber,
+        password: password,
+      );
+
+      // Vous pouvez manipuler le résultat si nécessaire (par exemple, stocker le token dans SharedPreferences)
+
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> livreurlogin(String email, String password) async {

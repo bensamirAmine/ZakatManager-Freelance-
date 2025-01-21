@@ -39,7 +39,7 @@ class _ZakatCalculatorState extends State<ZakatCalculator>
             color: backgroundColor,
             borderRadius: BorderRadius.circular(15),
             border: Border.all(
-              color: Colors.black,
+              color: primaryColor,
               width: 0.5,
             ),
             boxShadow: [
@@ -65,7 +65,7 @@ class _ZakatCalculatorState extends State<ZakatCalculator>
                     },
                     child: CircleAvatar(
                       radius: 40,
-                      backgroundColor: primaryColor,
+                      backgroundColor: textColor,
                       child: Icon(
                         FontAwesomeIcons.handHoldingHeart,
                         color: inputColor,
@@ -87,7 +87,7 @@ class _ZakatCalculatorState extends State<ZakatCalculator>
                   IconButton(
                     icon: Icon(
                       Icons.add_circle,
-                      color: primaryColor,
+                      color: textColor,
                       size: 30,
                     ),
                     onPressed: () {

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-providers/UserProvider.dart';
 import 'package:foodly_ui/A-providers/ZakatProvider.dart';
+import 'package:foodly_ui/screens/auth/sign_in_screen.dart';
 import 'package:foodly_ui/screens/home/TransactionHistory.dart';
+import 'package:foodly_ui/screens/home/UserAssetDisplay.dart';
 import 'package:foodly_ui/screens/home/ZakatCarousel.dart';
 import 'package:foodly_ui/screens/home/ZakatcalculatorPage.dart';
 import 'package:provider/provider.dart';
@@ -24,12 +26,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final _userProvider = Provider.of<UserProvider>(context, listen: false);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _userProvider.loadUser(
-          context,
-        );
-      });
+      final _zakatProvider = Provider.of<ZakatProvider>(context, listen: false);
+
+      _userProvider.loadUser(
+        context,
+      );
+      _zakatProvider.recalculateTotals(
+        context,
+      );
     });
+    ;
     super.initState();
   }
 
@@ -44,28 +50,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // final _user = context.watch<UserProvider?>()?.user!;
+
     final userprovider = Provider.of<UserProvider>(context);
+
     final _user = userprovider.user;
-    final total = _user?.zakatAmount ?? 0.0;
-    final _percent_cash = (_user?.balance != null &&
-            _user?.zakatAmount != null &&
-            _user!.zakatAmount > 0)
-        ? ((_user.balance / _user.zakatAmount) * 100)
-        : null;
+    if (_user == null) {
+      return Center(child: CircularProgressIndicator());
+    }
 
-    final double? _percent_gold =
-        ((_user!.goldWeight * _user.goldPricePerGram) / _user.zakatAmount) *
-            100;
-    DateTime? nissabDate = _user.NissabAcquisitionDate; // Date d'acquisition
-    DateTime zakatDueDate = nissabDate != null ? nissabDate.add(Duration(days: 365)) : DateTime.now(); // +1 an
+    final total = _user.zakatAmount ?? 0.0;
 
-    // Obtenir la date actuelle
-    DateTime currentDate = DateTime.now();
+    DateTime? nissabDate = _user.NissabAcquisitionDate; // Vérifiez sa nullité
+    DateTime? zakatDueDate;
+    if (nissabDate != null) {
+      zakatDueDate = nissabDate.add(Duration(days: 365));
+    } else {
+      // Gérez le cas où la date d'acquisition est absente
+      zakatDueDate =
+          DateTime.now().add(Duration(days: 365)); // Exemple par défaut
+    }
 
-    // Vérifier si la date actuelle est avant ou après la date limite
-    bool isZakatDue = currentDate.isAfter(zakatDueDate);
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         leading: Builder(
           builder: (context) {
             return IconButton(
@@ -77,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Column(
           children: [
             Text(
-              "Zakat".toUpperCase(),
+              "Zakatuk".toUpperCase(),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -129,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             DrawerHeader(
               decoration: const BoxDecoration(
-                color: primaryColor,
+                color: thirdColor,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -137,11 +145,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      // const CircleAvatar (
-                      //   radius: 30,
-                      //   backgroundImage:
-                      //       AssetImage('assets/images/profile.jpg'),
-                      // ),
                       const SizedBox(height: 10),
                       Column(
                         children: [
@@ -216,8 +219,17 @@ class _HomeScreenState extends State<HomeScreen> {
               leading: const Icon(Icons.exit_to_app),
               title: const Text('Logout'),
               onTap: () {
-                Navigator.pop(context);
-                // Implement logout functionality
+                // final SharedPreferences prefs =
+                //     SharedPreferences.getInstance() as SharedPreferences;
+
+                // prefs.remove('auth_token');
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SignInScreen(),
+                  ),
+                );
               },
             ),
           ],
@@ -246,7 +258,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Card(
-                        color: primaryColor,
+                        color: thirdColor,
                         elevation: 5,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12.0),
@@ -265,15 +277,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: inputColor,
                                     size: 25,
                                   ),
-                                  SizedBox(
-                                      width:
-                                          8), // Espacement entre l'icône et le texte
+                                  SizedBox(width: 8),
                                   Text(
-                                    "Votre Zakat sera due le ${zakatDueDate.day}-${zakatDueDate.month}-${zakatDueDate.year}.",
+                                    "Votre Zakat aura lieu le ${zakatDueDate.day}-${zakatDueDate.month}-${zakatDueDate.year}.",
                                     style: TextStyle(
                                       color: inputColor,
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                                      fontSize: 16,
                                     ),
                                   ),
                                 ],
@@ -288,9 +298,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                               Center(
                                 child: Text(
-                                  "Total To Pay  =  ${_user.zakatAmount / 40}.DT",
+                                  "Total To Pay  =  ${total / 40}.DT",
                                   style: TextStyle(
-                                    color: Colors.green,
+                                    color: primaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 15,
                                   ),
@@ -306,11 +316,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 400,
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: Colors.white, // Fond complètement transparent
+                        color: inputColor, // Fond complètement transparent
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
-                          color: Colors.black, // Contour noir
-                          width: 0.5,
+                          color: primaryColor, // Contour noir
+                          width: 1,
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -328,17 +338,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Icon(
                                 Icons.account_balance_wallet,
-                                color: primaryColor,
+                                color: textColor,
                                 size: 40,
                               ),
                               const SizedBox(width: 10),
                               Expanded(
                                 child: Text(
-                                  "Your Wallet",
+                                  "Mon portefeuille Zakatuk",
                                   style: TextStyle(
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.black,
+                                    color: primaryColor,
                                   ),
                                 ),
                               ),
@@ -373,7 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Total Balance",
+                            "Total",
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey.shade600,
@@ -394,14 +404,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   FontAwesomeIcons.box),
                             ],
                           ),
-                          const SizedBox(height: 20),
-                          // Barres de progression
-                          if (_percent_cash != null)
-                            _progressBar("Cash", _percent_cash, Colors.green),
-                          if (_percent_gold != null)
-                            _progressBar("Gold", _percent_gold, Colors.orange),
-
-                          // const SizedBox(height: 10),
+                          // const SizedBox(height: 20),
+                          UserAssetDisplay(user: _user),
                         ],
                       ),
                     ),
@@ -411,16 +415,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 170, // Ajustez la hauteur si nécessaire
                     child: ZakatCalculator(),
                   ),
+                  const SizedBox(height: 10),
+                  SingleChildScrollView(
+                    child: SizedBox(
+                      height: 400, // Ajustez la hauteur si nécessaire
+                      child: TransactionHistory(),
+                    ),
+                  ),
                   ZakatCarousel(),
                   Divider(
-                    color: titleColor,
+                    color: primaryColor,
                     thickness: 0.3,
                     indent: 20,
                     endIndent: 20,
-                  ),
-                  SizedBox(
-                    height: 300, // Ajustez la hauteur si nécessaire
-                    child: TransactionHistory(),
                   ),
                 ],
               ),
@@ -428,30 +435,94 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Afficher le Bottom Sheet
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Sélectionnez une organisation',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: organizations.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Icon(Icons.business, color: thirdColor),
+                          title: Text(
+                            organizations[index],
+                            style: TextStyle(fontSize: 12),
+                          ),
+                          trailing: Icon(Icons.handshake_outlined,
+                              color: primaryColor, size: 15),
+                          onTap: () {
+                            Navigator.pop(context); // Fermer le Bottom Sheet
+                            // Action à effectuer lors de la sélection
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    'Vous avez choisi : ${organizations[index]}'),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
+        child: Icon(
+          Icons.hail_rounded,
+          color: Colors.white,
+        ),
+        backgroundColor: primaryColor,
+      ),
     );
   }
+}
 
-  String _calculateRemainingTime(DateTime zakatDueDate) {
-    final now = DateTime.now(); // Date actuelle
-    final difference =
-        zakatDueDate.difference(now); // Différence entre les deux dates
+String _calculateRemainingTime(DateTime? zakatDueDate) {
+  if (zakatDueDate == null) {
+    return "La date limite de votre Zakat n'est pas définie.";
+  }
 
-    if (difference.isNegative) {
-      return "Le délai pour payer votre Zakat est dépassé.";
-    }
+  final now = DateTime.now(); // Date actuelle
+  final difference =
+      zakatDueDate.difference(now); // Différence entre les deux dates
 
-    final days = difference.inDays;
-    final hours = difference.inHours % 24;
-    final minutes = difference.inMinutes % 60;
+  if (difference.isNegative) {
+    return "Le délai pour payer votre Zakat est dépassé.";
+  }
 
-    // Construire un message clair
-    if (days > 0) {
-      return "Il reste $days jour${days > 1 ? 's' : ''} et $hours heure${hours > 1 ? 's' : ''} avant la date de paiement.";
-    } else if (hours > 0) {
-      return "Il reste $hours heure${hours > 1 ? 's' : ''} et $minutes minute${minutes > 1 ? 's' : ''} avant la date de paiement.";
-    } else {
-      return "Il reste $minutes minute${minutes > 1 ? 's' : ''} avant la date de paiement.";
-    }
+  final days = difference.inDays;
+  final hours = difference.inHours % 24;
+  final minutes = difference.inMinutes % 60;
+
+  // Construire un message clair
+  if (days > 0) {
+    return "Il reste $days jour${days > 1 ? 's' : ''} et $hours heure${hours > 1 ? 's' : ''} avant la date de paiement.";
+  } else if (hours > 0) {
+    return "Il reste $hours heure${hours > 1 ? 's' : ''} et $minutes minute${minutes > 1 ? 's' : ''} avant la date de paiement.";
+  } else {
+    return "Il reste $minutes minute${minutes > 1 ? 's' : ''} avant la date de paiement.";
   }
 }
 
@@ -482,8 +553,9 @@ class UserRowWidget extends StatelessWidget {
             ),
           ),
           Text(
-            "Nissab : 13,000 DT",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            "Nissab :19.933.872 DT",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: titleColor, fontSize: 15),
           ),
           const SizedBox(
             width: 5,
@@ -501,7 +573,7 @@ Widget _statisticWidget(String title, Color color, IconData icon) {
         width: 50,
         height: 50,
         decoration: BoxDecoration(
-          color: primaryColor,
+          color: textColor,
           shape: BoxShape.circle,
         ),
         child: Center(
@@ -518,43 +590,6 @@ Widget _statisticWidget(String title, Color color, IconData icon) {
           fontSize: 14,
           color: Colors.black,
         ),
-      ),
-    ],
-  );
-}
-
-Widget _progressBar(String label, double? progress, Color color) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Text(
-        label,
-        style: TextStyle(
-          fontSize: 14,
-          color: Colors.black,
-        ),
-      ),
-      const SizedBox(height: 5),
-      Stack(
-        children: [
-          Container(
-            height: 8,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(4),
-            ),
-          ),
-          LayoutBuilder(
-            builder: (context, constraints) => Container(
-              width: constraints.maxWidth * progress!,
-              height: 8,
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-          ),
-        ],
       ),
     ],
   );

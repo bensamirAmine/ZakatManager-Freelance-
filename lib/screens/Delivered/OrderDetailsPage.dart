@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodly_ui/A-models/Commande.dart';
 import 'package:foodly_ui/A-providers/commandeprovider.dart';
 import 'package:provider/provider.dart';
 

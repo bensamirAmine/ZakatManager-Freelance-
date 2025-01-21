@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:foodly_ui/A-models/PanierItem.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:http/http.dart' as http;
+import 'dart:developer' as developer;
 
 class PanierService {
   final AuthProvider authProvider;

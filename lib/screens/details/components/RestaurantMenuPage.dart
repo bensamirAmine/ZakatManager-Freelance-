@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/MenuItem.dart';
 import 'package:foodly_ui/A-providers/MenuProvider.dart';
 import 'package:foodly_ui/A-providers/PanierProvider.dart';
+import 'package:foodly_ui/A-providers/RestaurantProvider.dart';
 import 'package:foodly_ui/A-providers/SupplementProvider.dart';
 import 'package:foodly_ui/A-utils/ApiEndpoints.dart';
 import 'package:foodly_ui/constants.dart';

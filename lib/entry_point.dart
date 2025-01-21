@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:foodly_ui/screens/home/QAN.dart';
+import 'package:foodly_ui/screens/home/ZakatCalculator.dart';
 
 import 'constants.dart';
 import 'screens/home/home_screen.dart';
-import 'screens/orderDetails/order_details_screen.dart';
 import 'screens/profile/profile_screen.dart';
-import 'screens/search/search_screen.dart';
 
 class EntryPoint extends StatefulWidget {
   const EntryPoint({super.key});
@@ -22,16 +22,17 @@ class _EntryPointState extends State<EntryPoint> {
   // List of nav items
   final List<Map<String, dynamic>> _navitems = [
     {"icon": "assets/icons/home.svg", "title": "Home"},
-    {"icon": "assets/icons/search.svg", "title": "Search"},
-    {"icon": "assets/icons/order.svg", "title": "Orders"},
-    {"icon": "assets/icons/profile.svg", "title": "Profile"},
+    {"icon": "assets/icons/order.svg", "title": "Zakat"},
+    {"icon": "assets/icons/order.svg", "title": "Q&A"},
+    {"icon": "assets/icons/profile.svg", "title": "Profil"},
   ];
 
 // Screens
   final List<Widget> _screens = [
     const HomeScreen(),
-    const SearchScreen(),
-    const OrderDetailsScreen(),
+    // const SearchScreen(),
+    AddAssetZaketPage(),
+    FAQScreen(),
     const ProfileScreen(),
   ];
 
@@ -48,8 +49,8 @@ class _EntryPointState extends State<EntryPoint> {
           });
         },
         currentIndex: _selectedIndex,
-        activeColor: primaryColor,
-        inactiveColor: bodyTextColor,
+        activeColor: thirdColor,
+        inactiveColor: Colors.grey.shade500,
         items: List.generate(
           _navitems.length,
           (index) => BottomNavigationBarItem(
@@ -58,7 +59,7 @@ class _EntryPointState extends State<EntryPoint> {
               height: 30,
               width: 30,
               colorFilter: ColorFilter.mode(
-                  index == _selectedIndex ? primaryColor : bodyTextColor,
+                  index == _selectedIndex ? thirdColor : Colors.grey.shade500,
                   BlendMode.srcIn),
             ),
             label: _navitems[index]["title"],

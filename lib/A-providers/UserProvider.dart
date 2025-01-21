@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:foodly_ui/A-models/UserModel.dart';
 import 'package:foodly_ui/A-providers/AuthProvider.dart';
+import 'package:foodly_ui/A-services/AuthService.dart';
 import 'package:foodly_ui/A-services/MenuService.dart';
 import 'package:foodly_ui/A-services/RestaurantService.dart';
 import 'dart:developer' as developer;
@@ -47,7 +48,6 @@ class UserProvider with ChangeNotifier {
       final _userService = UserService(authProvider: authProvider);
       final userData = await _userService.getUser();
       _user = User.fromJson(userData);
-      developer.log('Total: $_user', name: '_user');
 
       notifyListeners();
     } catch (error) {

@@ -1,18 +1,20 @@
 // ignore: file_names
 class ApiEndpoints {
-  // ignore: constant_identifier_names
-  // static const ip_adress = '192.168.1.126';
-  // ignore: constant_identifier_names
-  // static const ip_adress = '192.168.1.68';
-
-  static const ip_adress = '51.79.165.181';
-  // static const ip_adress = '192.168.1.36';
-
+  // static const ip_adress = '192.168.1.51';
+  static const ip_adress = 'zakatuk.net';
+ 
 //______________________________ AUTH URL'S API ______________________________
+  static const userregistration = 'http://$ip_adress:1919/auth/User/signup';
+
   static const userlogin = 'http://$ip_adress:1919/auth/login';
   static const profile = 'http://$ip_adress:1919/user/profile';
   static const getHistorique =
       'http://$ip_adress:1919/zakat/individual/getHistorique';
+  static const delete_transaction =
+      'http://$ip_adress:1919/zakat/delete_transaction';
+
+  static const updateTransaction =
+      'http://$ip_adress:1919/zakat/updateTransaction';
   static const setTransaction =
       'http://$ip_adress:1919/zakat/individual/setTransaction';
 
